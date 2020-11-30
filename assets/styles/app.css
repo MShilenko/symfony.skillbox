@@ -18,11 +18,6 @@ body {
     line-height: 60px;
 }
 
-.navbar-bg {
-    background: url(/images/nav-background.jpg) center;
-    background-size: 100%;
-}
-
 .navbar > .container {
     background-color: rgba(0, 0, 0, 0.3);
 }
@@ -30,60 +25,42 @@ body {
 .nav-profile-img {
     width:  40px;
     height: 40px;
-}
-
-.banner-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    width: 100%;
-}
-
-.banner-link:hover {
-    text-decoration: none;
-}
-.banner-img-block {
-    overflow: hidden;
-    max-height: 250px;
-}
-.banner-img-block img {
-    width: 100%;
+    background-color: white;
 }
 
 .article-item {
-    max-height: 120px;
+    max-height: 150px;
     overflow: hidden;
 }
-
+.article-container {
+    background-color: #ffffff;
+}
 .article-container a {
     text-decoration: none;
     color: inherit;
-    background-color: #ffffff;
 }
 .article-container .article-comments {
     font-size: 0.6rem;
 }
 
 .article-container .article-img {
-    width: 120px;
-    height: 120px;
+    width: 240px;
+    height: 150px;
 }
 .article-author-img {
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
 }
-
-
-.advertisement-img {
-    width: 150px;
-    height: auto;
-    border: 2px solid #efefee;
-    border-radius: 5px;
-}
-
 
 .featured-border {
-    border-top: 5px solid lightblue !important;
+    border-top: 10px solid #007bff !important;
+}
+
+.admin-header-with-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 @import "./detail.css";
+@import "./signin.css";

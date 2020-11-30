@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru">
+{% include 'layout/head.html.twig' with { title: block('title') ?? 'Spill-Coffee-On-The-Keyboard' } %}
+<body>
+    <div class="container">
+        <div class="row">
+            {% include 'layout/nav.html.twig' %}
+
+            <div class="col-sm-12">
+                {% block body %}{% endblock %}
+            </div>
+        </div>        
+    </div>
+
+    {% include 'layout/footer.html.twig' %}
+</body>
+</html>

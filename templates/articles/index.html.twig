@@ -1,144 +1,58 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout/master.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <div class="row">
+    <div class="row">
+        <div class="col-md-12 col-xl-8">
 
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-sm-12 col-md-8">
-
-                        <div class="col-sm-12 border rounded-lg overflow-hidden flex-md-row mb-4 shadow-sm position-relative bg-white featured-border">
-                            <div class="row">
-                                <a class="banner-link" href="#">
-                                    <div class="banner-img-block d-block">
-                                        <img class="banner-img" src="{{ asset('images/cat-banner1.jpg') }}">
-                                    </div>
-                                    <h1 class="text-center mt-2 px-4">Спать или не спать: <br>С новыми кроватками это не вопрос</h1>
-                                </a>
-                            </div>
+            {% for article in articles %}
+                <div class="article-container mb-2">
+                    <div class="row no-gutters border flex-md-row p-3 mb-4 shadow-sm">
+                        <div class="col-auto d-block">
+                            <img class="article-img" src="{{ asset(article.image) }}">
                         </div>
-
-                        <div class="article-container mb-2">
-                            <div class="row no-gutters border rounded-lg overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-                                <div class="col-auto d-none d-lg-block">
-                                    <img class="article-img" src="/images/car2.jpg">
-                                </div>
-                                <a class="col p-2 px-4 d-flex flex-column article-item" href="{{ path('app_article_show', { slug: 'when-they-put-toilet' }) }}">
-                                    <h5 class="mb-2">Когда в машинах поставят лоток? <span class="badge badge-info article-comments">5 комментов</span></h5>
-                                    <div class="mb-2 d-flex">
-                                        <span class="badge badge-pill badge-secondary mr-2">Дрындулет</span>
-                                        <span class="badge badge-pill badge-secondary mr-2">Карета</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="text-muted align-self-center"><img class="article-author-img rounded-circle" src="https://robohash.org/Николай.png?set=set4"> Николай</div>
-                                        <div class="text-muted align-self-center">26 days ago</div>
-                                    </div>
-                                </a>
+                        <a class="col px-4 d-flex flex-column article-item" href="{{ path('app_article_show', { slug: article.slug }) }}">
+                            <h5 class="mb-2">{{ article.title }}</h5>
+                            <div class="d-flex mb-2">
+                                <div class="text-muted align-self-center"><img class="article-author-img rounded-circle" src="https://robohash.org/хэтээмэль_цеэсесович.png?set=set3"> Хэтээмэль Цеэсесович</div>
+                                <div class="text-muted align-self-center ml-3"><i class="fas fa-clock size-is-"></i> 3 дня назад</div>
                             </div>
-                        </div>
-
-
-                        <div class="article-container mb-2">
-                            <div class="row no-gutters border rounded-lg overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-                                <div class="col-auto d-none d-lg-block">
-                                    <img class="article-img" src="{{ asset('images/car1.jpg') }}">
-                                </div>
-                                <a class="col p-2 px-4 d-flex flex-column article-item" href="{{ path('app_article_show', { slug: 'chasing-the-red' }) }}">
-                                    <h5 class="mb-2">В погоне за красной точкой <span class="badge badge-info article-comments">5 комментов</span></h5>
-                                    <div class="mb-2 d-flex">
-                                        <span class="badge badge-pill badge-secondary mr-2">Карета</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="text-muted align-self-center"><img class="article-author-img rounded-circle" src="https://robohash.org/MrWhite.png?set=set4"> Mr. White</div>
-                                        <div class="text-muted align-self-center">26 days ago</div>
-                                    </div>
-                                </a>
+                            <div class="mb-2 d-flex">
+                                <span class="badge badge-primary mr-2"><i class="fas fa-comment"></i> 5</span>
+                                <span class="badge badge-pill badge-secondary mr-2">Html</span>
+                                <span class="badge badge-pill badge-secondary mr-2">Css</span>
                             </div>
-                        </div>
-
-
-                        <div class="article-container mb-2">
-                            <div class="row no-gutters border rounded-lg overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-                                <div class="col-auto d-none d-lg-block">
-                                    <img class="article-img" src="{{ asset('images/car2.jpg') }}">
-                                </div>
-                                <a class="col p-2 px-4 d-flex flex-column article-item" href="{{ path('app_article_show', { slug: 'is-there-life-after-ninth' }) }}">
-                                    <h5 class="mb-2">Есть ли жизнь после девятой жизни? <span class="badge badge-info article-comments">9 комментов</span></h5>
-                                    <div class="mb-2 d-flex">
-                                        <span class="badge badge-pill badge-secondary mr-2">Дрындулет</span>
-                                        <span class="badge badge-pill badge-secondary mr-2">Карета</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="text-muted align-self-center"><img class="article-author-img rounded-circle" src="https://robohash.org/Рыжик.png?set=set4"> Рыжик</div>
-                                        <div class="text-muted align-self-center">26 days ago</div>
-                                    </div>
-                                </a>
+                            <div class="mb-2 text-muted">
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting  industry. Lorem Ipsu…</p>
                             </div>
-                        </div>
-
-
-                        <div class="article-container mb-2">
-                            <div class="row no-gutters border rounded-lg overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-                                <div class="col-auto d-none d-lg-block">
-                                    <img class="article-img" src="{{ asset('images/car1.jpg') }}">
-                                </div>
-                                <a class="col p-2 px-4 d-flex flex-column article-item" href="{{ path('app_article_show', { slug: 'when-they-put-toilet' }) }}">
-                                    <h5 class="mb-2">Когда в машинах поставят лоток? <span class="badge badge-info article-comments">9 комментов</span></h5>
-                                    <div class="mb-2 d-flex">
-                                        <span class="badge badge-pill badge-secondary mr-2">Автобус</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="text-muted align-self-center"><img class="article-author-img rounded-circle" src="https://robohash.org/Том.png?set=set4"> Том</div>
-                                        <div class="text-muted align-self-center">1 month ago</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="article-container mb-2">
-                            <div class="row no-gutters border rounded-lg overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
-                                <div class="col-auto d-none d-lg-block">
-                                    <img class="article-img" src="{{ asset('images/car3.jpeg') }}">
-                                </div>
-                                <a class="col p-2 px-4 d-flex flex-column article-item" href="{{ path('app_article_show', { slug: 'chasing-the-red' }) }}">
-                                    <h5 class="mb-2">В погоне за красной точкой <span class="badge badge-info article-comments">2 комментов</span></h5>
-                                    <div class="mb-2 d-flex">
-                                        <span class="badge badge-pill badge-secondary mr-2">Дрындулет</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="text-muted align-self-center"><img class="article-author-img rounded-circle" src="https://robohash.org/Николай.png?set=set4"> Николай</div>
-                                        <div class="text-muted align-self-center">3 months ago</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        </a>
                     </div>
+                </div>
+            {% endfor %}
 
-                    <div class="col-sm-12 col-md-4 text-center">
-                        <div class="bg-white shadow-sm border rounded-lg pb-2 pt-2 px-5 mb-4 featured-border">
-                            <div class="ad-space mx-auto mt-1 pb-2 pt-2">
-                                <img class="advertisement-img mb-2" src="{{ asset('images/cat-food.jpg') }}">
-                                <p><b>Новинка:</b> Лакомные <i class="fas fa-heart text-warning"></i> <i class="fas fa-heart text-info"></i> <i class="fas fa-heart text-danger"></i></p>
-                                <button class="btn btn-info">Купить сейчас</button>
-                            </div>
-                        </div>
+        </div>
 
-                        <div class="quotes-container bg-white shadow-sm border rounded-lg pb-2 pt-2 px-5 featured-border">
-                            <h3 class="text-center pb-3">Коты в теме</h3>
-                            <p><i class="far fa-comment text-secondary"></i> "Недавно наши ученые создали гудок против собак,
-                                другие коты его не слышат, зато собаки уступают дорогу. Наконец-то в лоточек без пробок"
-                                <br> — <a href="#">Рыжий Бесстыжий, Антикоррупционер</a></p>
+        <div class="col-md-12 col-xl-4">
+            <div class="text-center bg-primary text-white py-1 border border-bottom-0">
+                <h4 class="mb-0">Последние комменты</h4>
+            </div>
+            <div class="quotes-container bg-white shadow-sm border border-top-0 pb-2 pt-2 px-5">
+                <div class="border-bottom mb-3">
+                    <div class="h4 text-left"># Когда пролил кофе на клавиатуру</div>
+                    <p><i class="far fa-comment text-secondary"></i> "Очень жизненно, аж прослезился"
+                        <br> — <a href="#">Василий ПиЭйчПи, Программист Ruby</a></p>
+                </div>
+                
+                <div class="border-bottom mb-3">
+                    <div class="h4 text-left"># Facebook ест твои данные</div>
+                    <p><i class="far fa-comment text-secondary"></i> "Backend'еры плакали, кололись, но продолжали верстать сайт"
+                        <br> — <a href="#">Флекс Абсолютович, Верстак от бога</a></p>
+                </div>
 
-                            <p class="pt-4"><i class="far fa-comment text-secondary"></i> "Этот сайт - это просто прелесть, я влюблена!
-                                <i class="fas fa-heart text-danger"></i> <i class="fas fa-heart text-danger"></i> <i class="fas fa-heart text-danger"></i>"
-                                <br>— <a href="#">Сметанка, Мурлыкатель</a></p>
-
-                            <p class="pt-4"><i class="far fa-comment text-secondary"></i> "Предлагаю ввести еще темы о еде,
-                                например, у меня заготовлены шикарные статьи по сосискам"
-                                <br>— <a href="#">Барон Сосискин, Дегустатор сосисок</a></p>
-                        </div>
-                    </div>
+                
+                <div>
+                    <div class="h4 text-left"># Что делать, если надо верстать?</div>
+                    <p><i class="far fa-comment text-secondary"></i> "Ой, я сайт перепутал"
+                        <br> — <a href="#">Барон Сосискин, Дегустатор сосисок</a></p>
                 </div>
             </div>
         </div>
