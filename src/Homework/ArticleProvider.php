@@ -45,6 +45,7 @@ class ArticleProvider
     public function article(): array
     {
         $rand_key = array_rand($this->articles);
+        
         return $this->articles[$rand_key];
     }
 }
