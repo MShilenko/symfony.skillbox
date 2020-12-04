@@ -5,7 +5,10 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/public/build/
 /var/
 /vendor/
+/node_modules/
+npm-debug.log
+yarn-error.log
 ###< symfony/framework-bundle ###
-node_modules
