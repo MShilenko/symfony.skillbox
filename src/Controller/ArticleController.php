@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Homework\ArticleProvider;
-use App\Service\MarkdownParser;
 use App\Service\SlackClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +22,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/articles/{slug}", name="app_article_show")
      */
-    public function show(string $slug, ArticleProvider $provider, MarkdownParser $parser, SlackClient $slack) 
+    public function show(string $slug, ArticleProvider $provider, SlackClient $slack) 
     {
         $article = $provider->article();
         // Пример корректного(полного) варианта использования кэша
@@ -40,8 +39,6 @@ class ArticleController extends AbstractController
         {
             $slack->send('Важное уведомление!');
         }
-
-        $article['content'] = $parser->parse($article['content']);
 
         $comments = [
             'comment1' => 'Text comment 1',
