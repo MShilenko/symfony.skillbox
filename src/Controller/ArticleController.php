@@ -24,6 +24,23 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @Route("/articles/article_content", methods={"GET"}, name="app_article_text_generate")
+     */
+    public function articleGenerate(Request $request, ArticleContentProviderInterface $provider)
+    {
+        $content = '';
+
+        if ($request->query->has('paragraphs')) {
+            $paragraphs = (int) $request->query->get('paragraphs');
+            $word = (string) $request->query->get('word') ?? null;
+            $wordCount = (int) $request->query->get('wordCount') ?? 0;
+            $content = $provider->get($paragraphs, $word, $wordCount);
+        }
+
+        return $this->render('articles/generate.html.twig', compact('content'));
+    }
+
+    /**
      * @Route("/articles/{slug}", name="app_article_show")
      */
     public function show(string $slug, EntityManagerInterface $em) 

@@ -1,0 +1,28 @@
+{% extends 'layout/base_content.html.twig' %}
+
+{% block title %}Генерация контента статьи{% endblock %}
+
+{% block content %}
+<h1>Генерация контента статьи</h1>
+
+<form>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Количество параграфов</label>
+        <input type="text" name="paragraphs" value="{{ app.request.query.get('paragraphs') }}" class="form-control" id="paragraphs" placeholder="Количество параграфов" required="required">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Вставляемое слово</label>
+        <input type="text" name="word" value="{{ app.request.query.get('word') }}" class="form-control" id="word" placeholder="Вставляемое слово">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Количество повторений вставляемого слова</label>
+        <input type="text" name="wordCount" value="{{ app.request.query.get('wordCount') }}" class="form-control" id="wordCount" placeholder="Количество повторений вставляемого слова">
+    </div>
+    <button type="submit" class="btn btn-primary">Сформировать</button>
+</form>
+
+<hr />
+
+{{ content|cached_markdown }}
+
+{% endblock %}
