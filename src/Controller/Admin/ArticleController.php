@@ -20,7 +20,9 @@ class ArticleController extends AbstractController
         $article
             ->setTitle('Что делать, если надо верстать?')
             ->setSlug('what-do-' . rand(100, 999))
-            ->setImage('images/article-' . rand(1, 3) . '.jpg')
+            ->setImage('article-' . rand(1, 3) . '.jpg')
+            ->setAuthor('User-' . rand(1, 5))
+            ->setLikeCount(rand(0, 10))
             ->setBody(<<<EOF
             Lorem ipsum **[кофе](/)** dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt Фронтенд Абсолютович ut labore et dolore magna aliqua. Purus viverra accumsan in nisl. Diam vulputate ut pharetra sit amet aliquam. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Est ultricies integer quis auctor elit sed. Tristique nulla aliquet enim tortor at. Tristique et egestas quis ipsum. Consequat semper viverra nam libero. Lectus quam id leo in vitae turpis. In eu mi bibendum neque egestas congue quisque egestas diam. кофе blandit turpis cursus in hac habitasse platea dictumst quisque.
 

@@ -42,6 +42,16 @@ class Article
      */
     private $publishedAt;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $author;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $likeCount;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +113,54 @@ class Article
     public function setPublishedAt(?\DateTimeInterface $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?string $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getLikeCount(): ?int
+    {
+        return $this->likeCount;
+    }
+
+    public function setLikeCount(?int $likeCount): self
+    {
+        $this->likeCount = $likeCount;
+
+        return $this;
+    }
+
+    public function getImagePath()
+    {
+        return "images/{$this->getImage()}";
+    }
+
+    public function getAuthorAvatarPath()
+    {
+        return "https://robohash.org/{$this->getAuthor()}.png?set=set3";
+    }
+
+    public function like()
+    {
+        $this->likeCount++;
+
+        return $this;
+    }
+
+    public function dislike()
+    {
+        $this->likeCount--;
 
         return $this;
     }

@@ -180,6 +180,9 @@
     "php-http/stopwatch-plugin": {
         "version": "1.4.0"
     },
+    "predis/predis": {
+        "version": "v1.1.6"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -479,6 +482,9 @@
         "version": "v5.1.9"
     },
     "twig/extra-bundle": {
+        "version": "v3.1.1"
+    },
+    "twig/string-extra": {
         "version": "v3.1.1"
     },
     "twig/twig": {

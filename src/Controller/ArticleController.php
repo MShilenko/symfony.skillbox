@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Homework\ArticleProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Homework\ArticleContentProviderInterface;
+use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,9 +16,9 @@ class ArticleController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function index(ArticleProvider $provider) 
+    public function index(ArticleRepository $repository) 
     {
-        $articles = $provider->articles();
+        $articles = $repository->findLatestPublished();
 
         return $this->render('articles/index.html.twig', compact('articles'));
     }
@@ -26,16 +26,9 @@ class ArticleController extends AbstractController
     /**
      * @Route("/articles/{slug}", name="app_article_show")
      */
-    public function show(string $slug, EntityManagerInterface $em) 
+    public function show(Article $article) 
 
     {
-        $repository = $em->getRepository(Article::class);
-        $article = $repository->findOneBy(['slug' => $slug]);
-
-        if (!$article) {
-            throw $this->createNotFoundException("Статья с символьным кодом {$slug} не найдена!");
-        }
-
         $comments = [
             'comment1' => 'Text comment 1',
             'comment2' => 'Text comment 2',

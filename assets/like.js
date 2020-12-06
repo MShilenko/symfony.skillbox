@@ -10,9 +10,10 @@ $(function () {
 
       if (e.target.classList.contains('btn')) {
         const type = e.target.getAttribute('data-item');
+        const href = e.target.getAttribute('data-href');
 
         $.ajax({
-          url: `/articles/10/like/${type}`,
+          url: href,
           method: 'POST'
         }).then(function (data) {
           $container.data('type', type === 'like' ? 'dislike' : 'like')
