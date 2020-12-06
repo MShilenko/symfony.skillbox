@@ -10,10 +10,13 @@ class MarkdownParser
 {
     /** @var Parsedown $parsedown */
     private $parsedown;
+
     /** @var AdapterInterface $cache */
     private $cache;
+
     /** @var LoggerInterface $logger */
     private $logger;
+    
     /** @var boolean $debug */
     private $debug;
 
