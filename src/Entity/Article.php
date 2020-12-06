@@ -28,6 +28,11 @@ class Article
     private $slug;
 
     /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $image;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $body;
@@ -62,6 +67,18 @@ class Article
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

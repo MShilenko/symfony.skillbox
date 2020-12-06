@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Homework\ArticleProvider;
-use App\Service\SlackClient;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,22 +23,13 @@ class ArticleController extends AbstractController
     /**
      * @Route("/articles/{slug}", name="app_article_show")
      */
-    public function show(string $slug, ArticleProvider $provider, SlackClient $slack) 
+    public function show(string $slug, EntityManagerInterface $em) 
     {
-        $article = $provider->article();
-        // Пример корректного(полного) варианта использования кэша
-        // $item = $cache->getItem('markdown_' . md5($article['content']));
+        $repository = $em->getRepository(Article::class);
+        $article = $repository->findOneBy(['slug' => $slug]);
 
-        // if (!$item->isHit()) {
-        //     $item->set($parsedown->text($article['content']));
-        //     $cache->save($item);
-        // }
-
-        // $article['content'] = $item->get();
-
-        if ($slug == 'slack')
-        {
-            $slack->send('Важное уведомление!');
+        if (!$article) {
+            throw $this->createNotFoundException("Статья с символьным кодом {$slug} не найдена!");
         }
 
         $comments = [

@@ -8,7 +8,7 @@
     <div class="article-detail col-sm-12">
         <div class="col-sm-12 p-2">
             <div class="media d-flex align-content-center">
-                <img class="article-detail-image align-self-start mr-3 rounded" src="{{ asset(article.image) }}">
+                <img class="article-detail-image align-self-start mr-3 rounded" src="{{ asset(article.image ?? 'images/article-1.jpg') }}">
                 <div class="media-body d-inline-block align-self-center">
                     <h1 class="mb-2">{{ article.title }}</h1>
                     <div class="d-flex mb-2">
@@ -16,7 +16,7 @@
                             <img class="article-author-img rounded-circle mr-2" src="https://robohash.org/флекс_абсолютович.jpg?set=set3">
                             Флекс Абсолютович
                         </div>
-                        <div class="text-muted align-self-center ml-4"><i class="fas fa-clock size-is-"></i> {{ article.createdAt|custom_date }}</div>
+                        <div class="text-muted align-self-center ml-4"><i class="fas fa-clock size-is-"></i> {{ article.publishedAt ? article.publishedAt|custom_date : 'Неопубликована' }}</div>
                     </div>
                     <div class="mb-2 d-flex">
                         <span class="badge badge-pill badge-secondary mr-2">Балбес</span>
@@ -36,7 +36,7 @@
         
 
         <div class="col-12 mt-2 mb-4">
-            {{ article.content|cached_markdown }}
+            {{ article.body|cached_markdown }}
         </div>
 
 
