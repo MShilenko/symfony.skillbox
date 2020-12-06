@@ -52,7 +52,7 @@ class ArticleController extends AbstractController
             'Mario',
         ];
 
-        if (mt_rand(0, 99) < 70) {
+        if (mt_rand(1, 10) > 3) {
             $article['content'] = $provider->get(rand(2, 10), $words[rand(0, count($words) - 1)], rand(2, 10));
         } else {
             $article['content'] = $provider->get(rand(2, 10));
