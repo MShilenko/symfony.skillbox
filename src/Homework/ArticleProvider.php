@@ -8,8 +8,10 @@ class ArticleProvider implements ArticleContentProviderInterface
 {
     private $articles;
     private $paragraphs;
+
     /** @var Parsedown $parser */
     private $parser;
+    
     /** @var string $markArticle */
     private $markArticle;
 
