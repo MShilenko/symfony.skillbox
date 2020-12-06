@@ -10,6 +10,7 @@ class AppExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
+            new TwigFilter('ago', [AppRuntime::class, 'getDiff']),
             new TwigFilter('cached_markdown', [AppRuntime::class, 'parseMarkdown'], ['is_safe' => ['html']]),
         ];
     }
