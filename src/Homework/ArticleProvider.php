@@ -8,8 +8,10 @@ class ArticleProvider implements ArticleContentProviderInterface
 {
     private $articles;
     private $paragraphs;
+
     /** @var Parsedown $parser */
     private $parser;
+    
     /** @var string $markArticle */
     private $markArticle;
 
@@ -22,6 +24,7 @@ class ArticleProvider implements ArticleContentProviderInterface
             0 => [
                 'title' => 'Что делать, если надо верстать?',
                 'slug' => 'what-do',
+                'createdAt' => 1289520000,
                 'image' => 'images/article-2.jpeg',
                 'content' => <<<EOF
                 Lorem ipsum **[кофе](/)** dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt Фронтенд Абсолютович ut labore et dolore magna aliqua. Purus viverra accumsan in nisl. Diam vulputate ut pharetra sit amet aliquam. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Est ultricies integer quis auctor elit sed. Tristique nulla aliquet enim tortor at. Tristique et egestas quis ipsum. Consequat semper viverra nam libero. Lectus quam id leo in vitae turpis. In eu mi bibendum neque egestas congue quisque egestas diam. кофе blandit turpis cursus in hac habitasse platea dictumst quisque.
@@ -34,6 +37,7 @@ class ArticleProvider implements ArticleContentProviderInterface
             1 => [
                 'title' => 'Facebook ест твои данные',
                 'slug' => 'facebook',
+                'createdAt' => 1363910400,
                 'image' => 'images/article-1.jpeg',
                 'content' => <<<EOF
                 Lorem ipsum **[кофе](/)** dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt Фронтенд Абсолютович ut labore et dolore magna aliqua. Purus viverra accumsan in nisl. Diam vulputate ut pharetra sit amet aliquam. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Est ultricies integer quis auctor elit sed. Tristique nulla aliquet enim tortor at. Tristique et egestas quis ipsum. Consequat semper viverra nam libero. Lectus quam id leo in vitae turpis. In eu mi bibendum neque egestas congue quisque egestas diam. кофе blandit turpis cursus in hac habitasse platea dictumst quisque.
@@ -46,6 +50,7 @@ class ArticleProvider implements ArticleContentProviderInterface
             2 => [
                 'title' => 'Когда пролил кофе на клавиатуру',
                 'slug' => 'cofeeee',
+                'createdAt' => 1515196800,
                 'image' => 'images/article-3.jpg',
                 'content' => <<<EOF
                 Lorem ipsum **[кофе](/)** dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt Фронтенд Абсолютович ut labore et dolore magna aliqua. Purus viverra accumsan in nisl. Diam vulputate ut pharetra sit amet aliquam. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Est ultricies integer quis auctor elit sed. Tristique nulla aliquet enim tortor at. Tristique et egestas quis ipsum. Consequat semper viverra nam libero. Lectus quam id leo in vitae turpis. In eu mi bibendum neque egestas congue quisque egestas diam. кофе blandit turpis cursus in hac habitasse platea dictumst quisque.
@@ -58,6 +63,7 @@ class ArticleProvider implements ArticleContentProviderInterface
             3 => [
                 'title' => 'Что делать, если надо верстать?',
                 'slug' => 'what-do2',
+                'createdAt' => 1576108800,
                 'image' => 'images/article-2.jpeg',
                 'content' => <<<EOF
                 Lorem ipsum **[кофе](/)** dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt Фронтенд Абсолютович ut labore et dolore magna aliqua. Purus viverra accumsan in nisl. Diam vulputate ut pharetra sit amet aliquam. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Est ultricies integer quis auctor elit sed. Tristique nulla aliquet enim tortor at. Tristique et egestas quis ipsum. Consequat semper viverra nam libero. Lectus quam id leo in vitae turpis. In eu mi bibendum neque egestas congue quisque egestas diam. кофе blandit turpis cursus in hac habitasse platea dictumst quisque.
@@ -70,6 +76,7 @@ class ArticleProvider implements ArticleContentProviderInterface
             4 => [
                 'title' => 'Когда пролил кофе на клавиатуру',
                 'slug' => 'cofeeee2',
+                'createdAt' => 1607175553,
                 'image' => 'images/article-3.jpg',
                 'content' => <<<EOF
                 Lorem ipsum **[кофе](/)** dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt Фронтенд Абсолютович ut labore et dolore magna aliqua. Purus viverra accumsan in nisl. Diam vulputate ut pharetra sit amet aliquam. Faucibus a pellentesque sit amet porttitor eget dolor morbi non. Est ultricies integer quis auctor elit sed. Tristique nulla aliquet enim tortor at. Tristique et egestas quis ipsum. Consequat semper viverra nam libero. Lectus quam id leo in vitae turpis. In eu mi bibendum neque egestas congue quisque egestas diam. кофе blandit turpis cursus in hac habitasse platea dictumst quisque.

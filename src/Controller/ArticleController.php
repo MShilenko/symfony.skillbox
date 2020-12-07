@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Homework\ArticleContentProviderInterface;
+use App\Entity\Article;
 use App\Homework\ArticleProvider;
-use App\Service\SlackClient;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Homework\ArticleContentProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,39 +24,33 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/articles/{slug}", name="app_article_show")
+     * @Route("/articles/article_content", methods={"GET"}, name="app_article_text_generate")
      */
-    public function show(string $slug, ArticleProvider $provider, SlackClient $slack) 
+    public function articleGenerate(Request $request, ArticleContentProviderInterface $provider)
     {
-        $article = $provider->article();
-        // Пример корректного(полного) варианта использования кэша
-        // $item = $cache->getItem('markdown_' . md5($article['content']));
+        $content = '';
 
-        // if (!$item->isHit()) {
-        //     $item->set($parsedown->text($article['content']));
-        //     $cache->save($item);
-        // }
-
-        // $article['content'] = $item->get();
-
-        if ($slug == 'slack')
-        {
-            $slack->send('Важное уведомление!');
+        if ($request->query->has('paragraphs')) {
+            $paragraphs = (int) $request->query->get('paragraphs');
+            $word = (string) $request->query->get('word') ?? null;
+            $wordCount = (int) $request->query->get('wordCount') ?? 0;
+            $content = $provider->get($paragraphs, $word, $wordCount);
         }
 
-        $words = [
-            'Batman',
-            'Robin',
-            'Superman',
-            'Spider-Man',
-            'Iron Man',
-            'Mario',
-        ];
+        return $this->render('articles/generate.html.twig', compact('content'));
+    }
 
-        if (mt_rand(1, 10) > 3) {
-            $article['content'] = $provider->get(rand(2, 10), $words[rand(0, count($words) - 1)], rand(2, 10));
-        } else {
-            $article['content'] = $provider->get(rand(2, 10));
+    /**
+     * @Route("/articles/{slug}", name="app_article_show")
+     */
+    public function show(string $slug, EntityManagerInterface $em) 
+
+    {
+        $repository = $em->getRepository(Article::class);
+        $article = $repository->findOneBy(['slug' => $slug]);
+
+        if (!$article) {
+            throw $this->createNotFoundException("Статья с символьным кодом {$slug} не найдена!");
         }
 
         $comments = [

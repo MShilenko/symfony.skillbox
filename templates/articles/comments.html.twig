@@ -1,0 +1,32 @@
+<div class="col-sm-12 mb-4">
+    <h3><i class="pr-3 far fa-comment text-secondary"></i>{{ comments|length }} Комментария</h3>
+    <hr>
+    
+    <div class="row mb-4">
+        <div class="col-sm-12">
+            <div class="comment-container align-self-start col-sm-6">
+                <div class="form-group">
+                    <textarea class="form-control" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Комментировать</button>
+            </div>
+        </div>
+    </div>
+
+    {% for key, comment in comments %}
+            <div class="row mt-2">
+            <div class="col-sm-12">
+                <div class="media">
+                    <img class="align-self-start comment-img rounded-circle" src="/images/profile.png">
+                    <div class="media-body align-self-start col-sm-6">
+                        <b>{{ key }}</b>
+                        <small>11 дней назад</small>
+                        <br>
+                        <span class="comment">{{ comment }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
