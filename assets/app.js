@@ -13,4 +13,4 @@ import './styles/app.css';
 
 require('bootstrap');
 
-import './like'
+import './vote'

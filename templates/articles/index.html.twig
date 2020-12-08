@@ -24,7 +24,7 @@
                                 <span class="badge badge-pill badge-secondary mr-2">Css</span>
                             </div>
                             <div class="mb-2 text-muted">
-                                <p>{{ article.body|u.truncate(60, '...')|cached_markdown }}</p>
+                                <p>{{ article.description|u.truncate(60, '...')|cached_markdown }}</p>
                             </div>
                         </div>
                     </div>

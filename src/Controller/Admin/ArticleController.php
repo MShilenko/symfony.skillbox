@@ -16,7 +16,7 @@ class ArticleController extends AbstractController
      */
     public function create(): Response
     {
-        
+        // Вынесено в фикстуры
 
         return new Response('Здесь будет создание статьи.');
     }

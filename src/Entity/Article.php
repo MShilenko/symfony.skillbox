@@ -28,6 +28,11 @@ class Article
     private $slug;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $description;
+
+    /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $image;
@@ -48,9 +53,14 @@ class Article
     private $author;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $keywords;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $likeCount;
+    private $voteCount;
 
     public function getId(): ?int
     {
@@ -77,6 +87,30 @@ class Article
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getKeywords(): ?string
+    {
+        return $this->keywords;
+    }
+
+    public function setKeywords(string $keywords): self
+    {
+        $this->keywords = $keywords;
 
         return $this;
     }
@@ -129,14 +163,14 @@ class Article
         return $this;
     }
 
-    public function getLikeCount(): ?int
+    public function getVoteCount(): ?int
     {
-        return $this->likeCount;
+        return $this->voteCount;
     }
 
-    public function setLikeCount(?int $likeCount): self
+    public function setVoteCount(?int $voteCount): self
     {
-        $this->likeCount = $likeCount;
+        $this->voteCount = $voteCount;
 
         return $this;
     }
@@ -151,16 +185,16 @@ class Article
         return "https://robohash.org/{$this->getAuthor()}.png?set=set3";
     }
 
-    public function like()
+    public function voteUp()
     {
-        $this->likeCount++;
+        $this->voteCount++;
 
         return $this;
     }
 
-    public function dislike()
+    public function voteDown()
     {
-        $this->likeCount--;
+        $this->voteCount--;
 
         return $this;
     }

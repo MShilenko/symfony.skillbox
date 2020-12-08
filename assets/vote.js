@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 $(function () {
 
-  $('[data-item=likes]').each(function () {
+  $('[data-item=vote]').each(function () {
     const $container = $(this);
 
     $container.on('click', function (e) {
@@ -16,9 +16,10 @@ $(function () {
           url: href,
           method: 'POST'
         }).then(function (data) {
-          $container.data('type', type === 'like' ? 'dislike' : 'like')
-          $container.find('.fa-heart').toggleClass('far fas');
-          $container.find('[data-item=likesCount]').text(data.likes);
+
+
+          $container.data('type', type === 'up' ? 'down' : 'up');
+          $container.find('[data-item=voteCount]').text(data.vote);
         });
       }
 

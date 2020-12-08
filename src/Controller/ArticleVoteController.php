@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ArticleLikeController extends AbstractController
+class ArticleVoteController extends AbstractController
 {
 
     /**
@@ -16,20 +16,20 @@ class ArticleLikeController extends AbstractController
      *
      * @param integer $id
      * @param string $type
-     * @Route("/articles/{slug}/like/{type<like|dislike>}", name="app_article_like", methods={"POST"})
+     * @Route("/articles/{slug}/vote/{type<up|down>}", name="app_article_vote", methods={"POST"})
      */
     public function like(Article $article, string $type, LoggerInterface $logger, EntityManagerInterface $em) 
     {
-        if ($type == 'like') {
-            $article->like();
-            $logger->info("Статья: {$article->getId()} - like");
+        if ($type == 'up') {
+            $article->voteUp();
+            $logger->info("Статья: {$article->getId()} - up");
         } else {
-            $article->dislike();
-            $logger->info("Статья: {$article->getId()} - dislike");
+            $article->voteDown();
+            $logger->info("Статья: {$article->getId()} - down");
         }
 
         $em->flush($article);
 
-        return $this->json(['likes' => $article->getLikeCount()]);
+        return $this->json(['vote' => $article->getVoteCount()]);
     }
 }
