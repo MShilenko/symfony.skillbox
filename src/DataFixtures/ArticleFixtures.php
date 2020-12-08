@@ -12,7 +12,6 @@ class ArticleFixtures extends BaseFixtures
         $this->createMany(Article::class, 10, function (Article $article) {
             $article
                 ->setTitle($this->faker->words(2, true))
-                ->setSlug($this->faker->slug())
                 ->setImage('article-' . $this->faker->numberBetween(1, 3) . '.jpg')
                 ->setAuthor($this->faker->firstName())
                 ->setVoteCount($this->faker->numberBetween(0, 10))
