@@ -3,13 +3,14 @@
 namespace App\DataFixtures;
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use Doctrine\Persistence\ObjectManager;
 
 class ArticleFixtures extends BaseFixtures
 {
     public function loadData(ObjectManager $manager)
     {
-        $this->createMany(Article::class, 10, function (Article $article) {
+        $this->createMany(Article::class, 10, function (Article $article) use($manager) {
             $article
                 ->setTitle($this->faker->words(2, true))
                 ->setImage('article-' . $this->faker->numberBetween(1, 3) . '.jpg')
@@ -25,6 +26,21 @@ class ArticleFixtures extends BaseFixtures
             if ($this->faker->boolean(50)) {
                 $article->setKeywords($this->faker->words($this->faker->numberBetween(2, 6), true));
             }
+
+            
         });
+    }
+
+    public function addComments()
+    {
+        for ($i =0 ; $i < $this->faker->numberBetween(2, 10); $i++) { 
+            $comment = (new Comment())
+                ->setAuthorName($this->faker->firstName())
+                ->setContent($this->faker->paragraphs(1, true))
+                ->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'))
+                ->setArticle($article);
+
+            $manager->persist($comment);
+        }
     }
 }
