@@ -11,13 +11,5 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    /**
-     * @Route("/admin/articles/create", name="app_admin_articles_create")
-     */
-    public function create(): Response
-    {
-        // Вынесено в фикстуры
 
-        return new Response('Здесь будет создание статьи.');
-    }
 }
