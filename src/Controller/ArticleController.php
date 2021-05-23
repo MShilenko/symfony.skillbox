@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Homework\ArticleContentProviderInterface;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,15 +45,7 @@ class ArticleController extends AbstractController
     public function show(Article $article) 
 
     {
-        $comments = [
-            'comment1' => 'Text comment 1',
-            'comment2' => 'Text comment 2',
-            'comment3' => 'Text comment 3',
-            'comment4' => 'Text comment 4',
-            'comment5' => 'Text comment 5',
-        ];
-
-        return $this->render('articles/show.html.twig', compact(['article', 'comments']));
+        return $this->render('articles/show.html.twig', compact('article'));
     }
 
     /**
