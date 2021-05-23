@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 $(function () {
 
-  $('[data-item=likes]').each(function () {
+  $('[data-item=vote]').each(function () {
     const $container = $(this);
 
     $container.on('click', function (e) {
@@ -10,14 +10,16 @@ $(function () {
 
       if (e.target.classList.contains('btn')) {
         const type = e.target.getAttribute('data-item');
+        const href = e.target.getAttribute('data-href');
 
         $.ajax({
-          url: `/articles/10/like/${type}`,
+          url: href,
           method: 'POST'
         }).then(function (data) {
-          $container.data('type', type === 'like' ? 'dislike' : 'like')
-          $container.find('.fa-heart').toggleClass('far fas');
-          $container.find('[data-item=likesCount]').text(data.likes);
+
+
+          $container.data('type', type === 'up' ? 'down' : 'up');
+          $container.find('[data-item=voteCount]').text(data.vote);
         });
       }
 

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
-{% include 'layout/head.html.twig' with { title: block('title') ?? 'Spill-Coffee-On-The-Keyboard' } %}
+{% include 'layout/head.html.twig' with { 
+    title: block('title') ?? 'Spill-Coffee-On-The-Keyboard', 
+    keywords: block('keywords') ?? '', 
+    } 
+%}
 <body>
     <div class="container">
         <div class="row">

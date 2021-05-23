@@ -28,6 +28,11 @@ class Article
     private $slug;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $description;
+
+    /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $image;
@@ -41,6 +46,21 @@ class Article
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $publishedAt;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $author;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $keywords;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $voteCount;
 
     public function getId(): ?int
     {
@@ -67,6 +87,30 @@ class Article
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getKeywords(): ?string
+    {
+        return $this->keywords;
+    }
+
+    public function setKeywords(string $keywords): self
+    {
+        $this->keywords = $keywords;
 
         return $this;
     }
@@ -103,6 +147,54 @@ class Article
     public function setPublishedAt(?\DateTimeInterface $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?string $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getVoteCount(): ?int
+    {
+        return $this->voteCount;
+    }
+
+    public function setVoteCount(?int $voteCount): self
+    {
+        $this->voteCount = $voteCount;
+
+        return $this;
+    }
+
+    public function getImagePath()
+    {
+        return "images/{$this->getImage()}";
+    }
+
+    public function getAuthorAvatarPath()
+    {
+        return "https://robohash.org/{$this->getAuthor()}.png?set=set3";
+    }
+
+    public function voteUp()
+    {
+        $this->voteCount++;
+
+        return $this;
+    }
+
+    public function voteDown()
+    {
+        $this->voteCount--;
 
         return $this;
     }

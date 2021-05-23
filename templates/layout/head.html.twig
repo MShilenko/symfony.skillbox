@@ -9,4 +9,7 @@
     {% endblock %}
 
     <title>{{ title }}</title>
+    {% if (keywords) %}
+        <meta name="Keywords" content="{{ keywords }}">
+    {% endif %}
 </head>
