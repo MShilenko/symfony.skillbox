@@ -43,7 +43,6 @@ class ArticleController extends AbstractController
      * @Route("/articles/{slug}", name="app_article_show")
      */
     public function show(Article $article) 
-
     {
         return $this->render('articles/show.html.twig', compact('article'));
     }

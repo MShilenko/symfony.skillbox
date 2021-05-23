@@ -23,7 +23,7 @@ class ArticleRepository extends ServiceEntityRepository
     /**
      * @return Article[] Returns an array of Article objects
      */
-    public function findLatestPublished()
+    public function findLatestPublished(): array
     {
         return $this
             ->published($this->latest())
@@ -32,19 +32,19 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
-    public function published(QueryBuilder $queryBuilder = null) 
+    public function published(QueryBuilder $qb = null): QueryBuilder 
     {
-        return $this->getOrCreateQueryBuilder($queryBuilder)->andWhere('a.publishedAt IS NOT NULL');
+        return $this->getOrCreateQueryBuilder($qb)->andWhere('a.publishedAt IS NOT NULL');
     }
 
-    public function latest(QueryBuilder $queryBuilder = null) 
+    public function latest(QueryBuilder $qb = null): QueryBuilder 
     {
-        return $this->getOrCreateQueryBuilder($queryBuilder)->orderBy('a.publishedAt', 'DESC');
+        return $this->getOrCreateQueryBuilder($qb)->orderBy('a.publishedAt', 'DESC');
     }
 
-    public function getOrCreateQueryBuilder(?QueryBuilder $queryBuilder): QueryBuilder
+    public function getOrCreateQueryBuilder(?QueryBuilder $qb): QueryBuilder
     {   
-        return $queryBuilder ?? $this->createQueryBuilder('a');
+        return $qb ?? $this->createQueryBuilder('a');
     }
 
     /*
