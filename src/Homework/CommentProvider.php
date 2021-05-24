@@ -4,8 +4,7 @@ namespace App\Homework;
 
 use Demontpx\ParsedownBundle\Parsedown;
 
-
-class ArticleProvider implements ArticleContentProviderInterface
+class CommentProvider implements CommentContentProviderInterface
 {
     /** @var TextGenerator $textGenerator */
     private $textGenerator;
@@ -15,8 +14,8 @@ class ArticleProvider implements ArticleContentProviderInterface
         $this->textGenerator = new TextGenerator($parser, $markArticle);
     }
 
-    public function get(int $paragraphs, string $word = null, int $wordsCount = 0): string
+    public function get(string $word = null, int $wordsCount = 0): string
     {
-        return $this->textGenerator->generate($paragraphs, $word, $wordsCount);
+        return $this->textGenerator->generate(1, $word, $wordsCount);
     }
 }

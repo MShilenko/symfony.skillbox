@@ -4,17 +4,22 @@ namespace App\DataFixtures;
 
 use App\Entity\Article;
 use App\Entity\Comment;
-use App\Homework\ArticleContentProviderInterface;
 use Doctrine\Persistence\ObjectManager;
+use App\Homework\ArticleContentProviderInterface;
+use App\Homework\CommentContentProviderInterface;
 
 class ArticleFixtures extends BaseFixtures
 {
     /** @var ArticleContentProviderInterface $articleContentProvider */
     private $articleContentProvider;
 
-    public function __construct(ArticleContentProviderInterface $articleContentProvider)
+    /** @var CommentContentProviderInterface $commentContentProvider */
+    private $commentContentProvider;
+
+    public function __construct(ArticleContentProviderInterface $ap, CommentContentProviderInterface $cp)
     {
-        $this->articleContentProvider = $articleContentProvider;
+        $this->articleContentProvider = $ap;
+        $this->commentContentProvider = $cp;
     }
 
     public function loadData(ObjectManager $manager): void
@@ -51,9 +56,19 @@ class ArticleFixtures extends BaseFixtures
         $this->createMany(Comment::class, $this->faker->numberBetween(2, 10), function (Comment $comment) use ($article) {
             $comment
                 ->setAuthorName($this->faker->firstName())
-                ->setContent($this->faker->paragraphs(1, true))
                 ->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'))
                 ->setArticle($article);
+
+            if ($this->faker->boolean(70)) {
+                $word = $this->faker->word();
+                $wordsCount = $this->faker->numberBetween(1, 5);
+            }
+
+            $comment->setContent($this->commentContentProvider->get($word ?? '', $wordsCount ?? 0));
+
+            if ($this->faker->boolean(70)) {
+                $comment->setDeletedAt($this->faker->dateTimeBetween('-10 days', '-1 days'));
+            }
         });
     }
 }

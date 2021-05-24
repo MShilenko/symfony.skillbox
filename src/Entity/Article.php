@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -69,7 +70,8 @@ class Article
     private $voteCount;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="article")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="article", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $comments;
 
@@ -221,6 +223,18 @@ class Article
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getPublishedComments(): Collection
+    {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->isNull('deletedAt'))
+            ->orderBy(['createdAt' => "DESC"]);
+
+        return $this->comments->matching($criteria);
     }
 
     public function addComment(Comment $comment): self

@@ -15,47 +15,43 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ArticleRepository extends ServiceEntityRepository
 {
+    use QueryHelper;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Article::class);
     }
 
-    /**
-     * @return Article[] Returns an array of Article objects
-     */
+    public function published(QueryBuilder $qb = null): QueryBuilder
+    {
+        return $this->getOrCreateQueryBuilder($qb)->andWhere('article.publishedAt IS NOT NULL');
+    }
+
+    public function latest(QueryBuilder $qb = null, string $sort = 'DESC'): QueryBuilder
+    {
+        return $this->getOrCreateQueryBuilder($qb)->orderBy("{$this->_class->getTableName()}.publishedAt", $sort);
+    }
+
     public function findLatestPublished(): array
     {
         return $this
             ->published($this->latest())
+            ->innerJoin('article.comments', 'comments')
+            ->addSelect('comments')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
-    public function published(QueryBuilder $qb = null): QueryBuilder 
+    public function getArticleWithComments(string $slug = ''): ?Article
     {
-        return $this->getOrCreateQueryBuilder($qb)->andWhere('a.publishedAt IS NOT NULL');
-    }
+        $qb = $this->createQueryBuilder('article');
 
-    public function latest(QueryBuilder $qb = null): QueryBuilder 
-    {
-        return $this->getOrCreateQueryBuilder($qb)->orderBy('a.publishedAt', 'DESC');
-    }
-
-    public function getOrCreateQueryBuilder(?QueryBuilder $qb): QueryBuilder
-    {   
-        return $qb ?? $this->createQueryBuilder('a');
-    }
-
-    /*
-    public function findOneBySomeField($value): ?Article
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
+        return $qb
+            ->where('article.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->innerJoin('article.comments', 'comments')
+            ->addSelect('comments')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
 }
