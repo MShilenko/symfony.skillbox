@@ -16,10 +16,10 @@ class ArticleFixtures extends BaseFixtures
     /** @var CommentContentProviderInterface $commentContentProvider */
     private $commentContentProvider;
 
-    public function __construct(ArticleContentProviderInterface $ap, CommentContentProviderInterface $cp)
+    public function __construct(ArticleContentProviderInterface $articleContentProviderInterface, CommentContentProviderInterface $commentContentProviderInterface)
     {
-        $this->articleContentProvider = $ap;
-        $this->commentContentProvider = $cp;
+        $this->articleContentProvider = $articleContentProviderInterface;
+        $this->commentContentProvider = $commentContentProviderInterface;
     }
 
     public function loadData(ObjectManager $manager): void

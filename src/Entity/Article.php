@@ -225,18 +225,6 @@ class Article
         return $this->comments;
     }
 
-    /**
-     * @return Collection|Comment[]
-     */
-    public function getPublishedComments(): Collection
-    {
-        $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->isNull('deletedAt'))
-            ->orderBy(['createdAt' => "DESC"]);
-
-        return $this->comments->matching($criteria);
-    }
-
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {

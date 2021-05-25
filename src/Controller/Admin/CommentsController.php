@@ -12,9 +12,9 @@ class CommentsController extends AbstractController
     /**
      * @Route("/admin/comments", name="app_admin_comments")
      */
-    public function index(Request $request, CommentRepository $cr)
+    public function index(Request $request, CommentRepository $commentRepository)
     {    
-        $comments = $cr->findAllWithSearch($request->query->get('q'), $request->query->has('showDeleted'));
+        $comments = $commentRepository->findAllWithSearch($request->query->get('q'), $request->query->has('showDeleted'));
 
         return $this->render('admin/comments/index.html.twig', compact('comments'));
     }

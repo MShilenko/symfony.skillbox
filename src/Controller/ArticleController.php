@@ -16,10 +16,10 @@ class ArticleController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function index(ArticleRepository $ar, CommentRepository $cm) 
+    public function index(ArticleRepository $articleRepository, CommentRepository $commentRepository) 
     {
-        $articles = $ar->findLatestPublished();
-        $lastComments = $cm->findLatestWithLimit(3);
+        $articles = $articleRepository->findLatestPublished();
+        $lastComments = $commentRepository->findLatestWithLimit(3);
 
         return $this->render('articles/index.html.twig', compact('articles', 'lastComments'));
     }
@@ -44,9 +44,9 @@ class ArticleController extends AbstractController
     /**
      * @Route("/articles/{slug}", name="app_article_show")
      */
-    public function show(string $slug, ArticleRepository $ar) 
+    public function show(string $slug, ArticleRepository $articleRepository) 
     {
-        $article = $ar->getArticleWithComments($slug);
+        $article = $articleRepository->getArticleWithComments($slug);
 
         return $this->render('articles/show.html.twig', compact('article'));
     }

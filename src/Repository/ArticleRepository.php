@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Article;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Article|null find($id, $lockMode = null, $lockVersion = null)
@@ -38,6 +38,7 @@ class ArticleRepository extends ServiceEntityRepository
             ->published($this->latest())
             ->innerJoin('article.comments', 'comments')
             ->addSelect('comments')
+            ->andWhere('comments.deletedAt IS NULL')
             ->getQuery()
             ->getResult();
     }
@@ -51,7 +52,21 @@ class ArticleRepository extends ServiceEntityRepository
             ->setParameter('slug', $slug)
             ->innerJoin('article.comments', 'comments')
             ->addSelect('comments')
+            ->andWhere('comments.deletedAt IS NULL')
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    // Пример выборки с параметрами для связанной таблицы
+    // /**
+    //  * @return Collection|Comment[]
+    //  */
+    // public function getPublishedComments(): Collection
+    // {
+    //     $criteria = Criteria::create()
+    //         ->andWhere(Criteria::expr()->isNull('deletedAt'))
+    //         ->orderBy(['createdAt' => "DESC"]);
+
+    //     return $this->comments->matching($criteria);
+    // }
 }
