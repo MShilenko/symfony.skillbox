@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 trait QueryHelper
 {
@@ -38,5 +39,44 @@ trait QueryHelper
     public function latest(QueryBuilder $qb = null, string $sort = 'DESC'): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder($qb)->orderBy("{$this->_class->getTableName()}.createdAt", $sort);
+    }
+
+    /**
+     * Добавляем поисковый запрос
+     *
+     * @param QueryBuilder $qb
+     * @param array $fields
+     * @param string|null $search
+     * @return QueryBuilder
+     */
+    private function withSearchQuery(QueryBuilder $qb, array $fields, ?string $search): QueryBuilder
+    {
+        $query = '';
+
+        if ($search) {
+            foreach ($fields as $k => $f) {
+                $query .= $k > 0 ? " OR {$f} LIKE :search" : "{$f} LIKE :search";
+            }
+
+            $qb
+                ->andWhere($query)
+                ->setParameter('search', "%{$search}%");
+        }
+
+        return $qb;
+    }
+
+    /**
+     * Отключаем фильтр не показывающий удаленные записи в списке
+     *
+     * @param ServiceEntityRepository $repository
+     * @param boolean $showDeleted
+     * @return void
+     */
+    private function withShowDeletedQuery(ServiceEntityRepository $repository, bool $showDeleted): void
+    {
+        if ($showDeleted) {
+            $repository->getEntityManager()->getFilters()->disable('softdeleteable');
+        }
     }
 }
