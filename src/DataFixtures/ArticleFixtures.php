@@ -43,7 +43,7 @@ class ArticleFixtures extends BaseFixtures implements DependentFixtureInterface
                 $article->setKeywords($this->faker->words($this->faker->numberBetween(2, 6), true));
             }
 
-            for ($i=0; $i <= rand(1, 4); $i++) { 
+            for ($i = 0; $i <= rand(0, 4); $i++) { 
                 $article->addTag($this->getRandomReference(Tag::class));
             }
         });
