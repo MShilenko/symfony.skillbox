@@ -22,10 +22,10 @@ class ArticleVoteController extends AbstractController
     {
         if ($type == 'up') {
             $article->voteUp();
-            $logger->info("Статья: {$article->getId()} - up");
+            $logger->info("Article - up", ["id" => $article->getId()]);
         } else {
             $article->voteDown();
-            $logger->info("Статья: {$article->getId()} - down");
+            $logger->info("Article - down", ["id" => $article->getId()]);
         }
 
         $em->flush($article);

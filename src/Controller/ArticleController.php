@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Homework\ArticleContentProviderInterface;
 use App\Repository\ArticleRepository;
+use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +16,12 @@ class ArticleController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function index(ArticleRepository $repository) 
+    public function index(ArticleRepository $articleRepository, CommentRepository $commentRepository) 
     {
-        $articles = $repository->findLatestPublished();
+        $articles = $articleRepository->findLatestPublished();
+        $lastComments = $commentRepository->findLatestWithLimit(3);
 
-        return $this->render('articles/index.html.twig', compact('articles'));
+        return $this->render('articles/index.html.twig', compact('articles', 'lastComments'));
     }
 
     /**
@@ -42,9 +44,10 @@ class ArticleController extends AbstractController
     /**
      * @Route("/articles/{slug}", name="app_article_show")
      */
-    public function show(Article $article) 
-
+    public function show(string $slug, ArticleRepository $articleRepository) 
     {
+        $article = $articleRepository->getArticleWithComments($slug);
+
         return $this->render('articles/show.html.twig', compact('article'));
     }
 

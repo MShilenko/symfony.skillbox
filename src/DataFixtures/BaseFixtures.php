@@ -31,7 +31,7 @@ abstract class BaseFixtures extends Fixture
      * @param callable $factory
      * @return $entity
      */
-    protected function create(string $className, callable $factory)
+    protected function create(string $className, callable $factory): object
     {
         $entity = new $className();
         $factory($entity);
@@ -51,8 +51,8 @@ abstract class BaseFixtures extends Fixture
      */
     protected function createMany(string $className, int $count, callable $factory)
     {
-        for ($i = 0; $i < $count; $i++) { 
-           $this->create($className, $factory);
+        for ($i = 0; $i < $count; $i++) {
+            $this->create($className, $factory);
         }
 
         $this->manager->flush();

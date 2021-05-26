@@ -16,7 +16,7 @@ class MarkdownParser
 
     /** @var LoggerInterface $logger */
     private $logger;
-    
+
     /** @var boolean $debug */
     private $debug;
 
@@ -41,7 +41,7 @@ class MarkdownParser
             return $this->parsedown->text($source);
         }
 
-        return $this->cache->get('markdown_' . md5($source), function () use ($source) {
+        return $this->cache->getItem('markdown_' . md5($source), function () use ($source) {
             return $this->parsedown->text($source);
         });
     }
