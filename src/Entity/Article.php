@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Entity(repositoryClass=ArticleRepository::class)
+ * @ORM\Entity(repositoryClass=App\Repository\ArticleRepository::class)
  */
 class Article
 {
@@ -70,7 +70,8 @@ class Article
     private $voteCount;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="article")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="article", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $comments;
 
@@ -192,24 +193,24 @@ class Article
         return $this;
     }
 
-    public function getImagePath()
+    public function getImagePath(): string
     {
         return "images/{$this->getImage()}";
     }
 
-    public function getAuthorAvatarPath()
+    public function getAuthorAvatarPath(): string
     {
         return "https://robohash.org/{$this->getAuthor()}.png?set=set3";
     }
 
-    public function voteUp()
+    public function voteUp(): self
     {
         $this->voteCount++;
 
         return $this;
     }
 
-    public function voteDown()
+    public function voteDown(): self
     {
         $this->voteCount--;
 

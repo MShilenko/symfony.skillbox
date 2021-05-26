@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Article;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Article|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,47 +15,58 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ArticleRepository extends ServiceEntityRepository
 {
+    use QueryHelper;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Article::class);
     }
 
-    /**
-     * @return Article[] Returns an array of Article objects
-     */
-    public function findLatestPublished()
+    public function published(QueryBuilder $qb = null): QueryBuilder
+    {
+        return $this->getOrCreateQueryBuilder($qb)->andWhere('article.publishedAt IS NOT NULL');
+    }
+
+    public function latest(QueryBuilder $qb = null, string $sort = 'DESC'): QueryBuilder
+    {
+        return $this->getOrCreateQueryBuilder($qb)->orderBy("{$this->_class->getTableName()}.publishedAt", $sort);
+    }
+
+    public function findLatestPublished(): array
     {
         return $this
             ->published($this->latest())
+            ->innerJoin('article.comments', 'comments')
+            ->addSelect('comments')
+            ->andWhere('comments.deletedAt IS NULL')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
-    public function published(QueryBuilder $queryBuilder = null) 
+    public function getArticleWithComments(string $slug = ''): ?Article
     {
-        return $this->getOrCreateQueryBuilder($queryBuilder)->andWhere('a.publishedAt IS NOT NULL');
-    }
+        $qb = $this->createQueryBuilder('article');
 
-    public function latest(QueryBuilder $queryBuilder = null) 
-    {
-        return $this->getOrCreateQueryBuilder($queryBuilder)->orderBy('a.publishedAt', 'DESC');
-    }
-
-    public function getOrCreateQueryBuilder(?QueryBuilder $queryBuilder): QueryBuilder
-    {   
-        return $queryBuilder ?? $this->createQueryBuilder('a');
-    }
-
-    /*
-    public function findOneBySomeField($value): ?Article
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
+        return $qb
+            ->where('article.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->innerJoin('article.comments', 'comments')
+            ->addSelect('comments')
+            ->andWhere('comments.deletedAt IS NULL')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
+
+    // Пример выборки с параметрами для связанной таблицы
+    // /**
+    //  * @return Collection|Comment[]
+    //  */
+    // public function getPublishedComments(): Collection
+    // {
+    //     $criteria = Criteria::create()
+    //         ->andWhere(Criteria::expr()->isNull('deletedAt'))
+    //         ->orderBy(['createdAt' => "DESC"]);
+
+    //     return $this->comments->matching($criteria);
+    // }
 }

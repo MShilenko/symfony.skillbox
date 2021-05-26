@@ -6,7 +6,6 @@ use App\Homework\ArticleContentProviderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -27,7 +26,7 @@ class ArticleContentProviderCommand extends Command
         $this
             ->setDescription('Генерация "случайного" текста статьи')
             ->addArgument('paragraphs', InputArgument::REQUIRED, 'Количество параграфов')
-            ->addArgument('word', InputArgument::OPTIONAL, 'Ключевое слово', null)
+            ->addArgument('word', InputArgument::OPTIONAL, 'Ключевое слово')
             ->addArgument('wordsCount', InputArgument::OPTIONAL, 'Количество повторений ключевого слова', 0)
         ;
     }

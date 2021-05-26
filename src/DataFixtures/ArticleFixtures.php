@@ -4,20 +4,25 @@ namespace App\DataFixtures;
 
 use App\Entity\Article;
 use App\Entity\Comment;
-use App\Homework\ArticleContentProviderInterface;
 use Doctrine\Persistence\ObjectManager;
+use App\Homework\ArticleContentProviderInterface;
+use App\Homework\CommentContentProviderInterface;
 
 class ArticleFixtures extends BaseFixtures
 {
     /** @var ArticleContentProviderInterface $articleContentProvider */
     private $articleContentProvider;
 
-    public function __construct(ArticleContentProviderInterface $articleContentProvider)
+    /** @var CommentContentProviderInterface $commentContentProvider */
+    private $commentContentProvider;
+
+    public function __construct(ArticleContentProviderInterface $articleContentProviderInterface, CommentContentProviderInterface $commentContentProviderInterface)
     {
-        $this->articleContentProvider = $articleContentProvider;
+        $this->articleContentProvider = $articleContentProviderInterface;
+        $this->commentContentProvider = $commentContentProviderInterface;
     }
 
-    public function loadData(ObjectManager $manager)
+    public function loadData(ObjectManager $manager): void
     {
         $this->createMany(Article::class, 10, function (Article $article) {
             $article
@@ -25,14 +30,13 @@ class ArticleFixtures extends BaseFixtures
                 ->setImage('article-' . $this->faker->numberBetween(1, 3) . '.jpg')
                 ->setAuthor($this->faker->firstName())
                 ->setVoteCount($this->faker->numberBetween(0, 10))
-                // ->setBody('Lorem ipsum **[кофе](/)** dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt Фронтенд Абсолютович ut labore et dolore magna aliqua. Purus viverra accumsan in nisl.' . $this->faker->paragraphs($this->faker->numberBetween(2, 5), true))
                 ->setDescription($this->faker->words($this->faker->numberBetween(3, 8), true));
 
             if ($this->faker->boolean(70)) {
                 $word = $this->faker->word();
                 $wordsCount = $this->faker->numberBetween(5, 10);
             }
-        
+
             $article->setBody($this->articleContentProvider->get($this->faker->numberBetween(2, 10), $word ?? '', $wordsCount ?? 0));
 
             if ($this->faker->boolean(60)) {
@@ -41,20 +45,30 @@ class ArticleFixtures extends BaseFixtures
 
             if ($this->faker->boolean(50)) {
                 $article->setKeywords($this->faker->words($this->faker->numberBetween(2, 6), true));
-            }  
+            }
+
+            $this->addComments($article);
         });
     }
 
-    public function addComments()
+    public function addComments(Article $article): void
     {
-        for ($i =0 ; $i < $this->faker->numberBetween(2, 10); $i++) { 
-            $comment = (new Comment())
+        $this->createMany(Comment::class, $this->faker->numberBetween(2, 10), function (Comment $comment) use ($article) {
+            $comment
                 ->setAuthorName($this->faker->firstName())
-                ->setContent($this->faker->paragraphs(1, true))
                 ->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'))
                 ->setArticle($article);
 
-            $manager->persist($comment);
-        }
+            if ($this->faker->boolean(70)) {
+                $word = $this->faker->word();
+                $wordsCount = $this->faker->numberBetween(1, 5);
+            }
+
+            $comment->setContent($this->commentContentProvider->get($word ?? '', $wordsCount ?? 0));
+
+            if ($this->faker->boolean(70)) {
+                $comment->setDeletedAt($this->faker->dateTimeBetween('-10 days', '-1 days'));
+            }
+        });
     }
 }
