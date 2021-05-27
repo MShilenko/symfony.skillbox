@@ -10,10 +10,10 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         # Пример создания фильтра, в данном случае все запросы будут ввозвращать результаты без удаленных(deletedAt) записей
-        # filters: 
-        #     softdeleteable:
-        #         class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
-        #         enabled: true
+        filters: 
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
         mappings:
             App:
                 is_bundle: false

@@ -22,43 +22,20 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    public function findAllWithSearch(?string $search, bool $showDeleted = false): array
+    public function findAllWithSearchQuery(?string $search, bool $showDeleted = false): QueryBuilder
     {
         $qb = $this->createQueryBuilder('c');
-        $this->withSearchQuery($qb, $search);
-        $this->withShowDeletedQuery($qb, $showDeleted);
+        $qFields = ["c.content", "c.authorName", "a.title"];
+        $this->withSearchQuery($qb, $qFields, $search);
+        $this->withShowDeletedQuery($this, $showDeleted);
 
         return $qb
             ->innerJoin('c.article', 'a')
             ->addSelect('a')
-            ->orderBy('c.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('c.createdAt', 'DESC');
     }
 
-    private function withSearchQuery(QueryBuilder $qb, ?string $search): QueryBuilder
-    {
-        if ($search) {
-            $qb
-                ->andWhere(
-                    'c.content LIKE :search 
-                    OR c.authorName LIKE :search
-                    OR a.title LIKE :search'
-                )
-                ->setParameter('search', "%{$search}%");
-        }
-
-        return $qb;
-    }
-
-    private function withShowDeletedQuery(QueryBuilder $qb, bool $showDeleted): QueryBuilder
-    {
-        if (!$showDeleted) {
-            $qb->andWhere('c.deletedAt IS NULL');
-        }
-
-        return $qb;
-    }
+    
 
     public function findLatestWithLimit(int $limit): array
     {

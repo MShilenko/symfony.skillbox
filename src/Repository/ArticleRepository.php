@@ -38,7 +38,8 @@ class ArticleRepository extends ServiceEntityRepository
             ->published($this->latest())
             ->innerJoin('article.comments', 'comments')
             ->addSelect('comments')
-            ->andWhere('comments.deletedAt IS NULL')
+            ->leftJoin('article.tags', 'tags')
+            ->addSelect('tags')
             ->getQuery()
             ->getResult();
     }
@@ -52,7 +53,8 @@ class ArticleRepository extends ServiceEntityRepository
             ->setParameter('slug', $slug)
             ->innerJoin('article.comments', 'comments')
             ->addSelect('comments')
-            ->andWhere('comments.deletedAt IS NULL')
+            ->leftJoin('article.tags', 'tags')
+            ->addSelect('tags')
             ->getQuery()
             ->getOneOrNullResult();
     }

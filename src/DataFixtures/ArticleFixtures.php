@@ -2,29 +2,25 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Tag;
 use App\Entity\Article;
-use App\Entity\Comment;
 use Doctrine\Persistence\ObjectManager;
 use App\Homework\ArticleContentProviderInterface;
-use App\Homework\CommentContentProviderInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class ArticleFixtures extends BaseFixtures
+class ArticleFixtures extends BaseFixtures implements DependentFixtureInterface
 {
     /** @var ArticleContentProviderInterface $articleContentProvider */
     private $articleContentProvider;
 
-    /** @var CommentContentProviderInterface $commentContentProvider */
-    private $commentContentProvider;
-
-    public function __construct(ArticleContentProviderInterface $articleContentProviderInterface, CommentContentProviderInterface $commentContentProviderInterface)
+    public function __construct(ArticleContentProviderInterface $articleContentProviderInterface)
     {
         $this->articleContentProvider = $articleContentProviderInterface;
-        $this->commentContentProvider = $commentContentProviderInterface;
     }
 
     public function loadData(ObjectManager $manager): void
     {
-        $this->createMany(Article::class, 10, function (Article $article) {
+        $this->createMany(Article::class, 20, function (Article $article) {
             $article
                 ->setTitle($this->faker->words(2, true))
                 ->setImage('article-' . $this->faker->numberBetween(1, 3) . '.jpg')
@@ -47,28 +43,14 @@ class ArticleFixtures extends BaseFixtures
                 $article->setKeywords($this->faker->words($this->faker->numberBetween(2, 6), true));
             }
 
-            $this->addComments($article);
+            for ($i = 0; $i <= rand(0, 4); $i++) { 
+                $article->addTag($this->getRandomReference(Tag::class));
+            }
         });
     }
 
-    public function addComments(Article $article): void
+    public function getDependencies()
     {
-        $this->createMany(Comment::class, $this->faker->numberBetween(2, 10), function (Comment $comment) use ($article) {
-            $comment
-                ->setAuthorName($this->faker->firstName())
-                ->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'))
-                ->setArticle($article);
-
-            if ($this->faker->boolean(70)) {
-                $word = $this->faker->word();
-                $wordsCount = $this->faker->numberBetween(1, 5);
-            }
-
-            $comment->setContent($this->commentContentProvider->get($word ?? '', $wordsCount ?? 0));
-
-            if ($this->faker->boolean(70)) {
-                $comment->setDeletedAt($this->faker->dateTimeBetween('-10 days', '-1 days'));
-            }
-        });
+        return [TagFixtures::class];
     }
 }

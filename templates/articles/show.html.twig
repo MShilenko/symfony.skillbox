@@ -16,11 +16,9 @@
             </div>
             <div class="text-muted align-self-center ml-4"><i class="fas fa-clock size-is-"></i> {{ article.publishedAt ? article.publishedAt|ago : 'Неопубликована' }}</div>
         </div>
-        <div class="mb-2 d-flex">
-            <span class="badge badge-pill badge-secondary mr-2">Балбес</span>
-            <span class="badge badge-pill badge-secondary mr-2">Криворучка</span>
-            <span class="badge badge-pill badge-secondary mr-2">Рукопоп</span>
-        </div>
+
+        {% include 'partial/article_tags.html.twig' with {tags: article.tags} %}
+        
         <div class="mb-2">
             <div class="text-muted align-self-center article-detail-arrows" data-item="vote">
                 <span data-item="voteCount" class="{{ article.voteCount > 0 ? 'text-success' : 'text-danger' }}">{{ article.voteCount }}</span> 
