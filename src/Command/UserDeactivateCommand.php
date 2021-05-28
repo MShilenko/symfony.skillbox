@@ -45,7 +45,9 @@ class UserDeactivateCommand extends Command
             throw new \Exception('Укажите Id пользователя');
         }
 
-        if (!$user = $this->userRepository->findOneBy(['id' => $id])) {
+        $user = $this->userRepository->findOneBy(['id' => $id]);
+
+        if (!$user) {
             throw new \Exception("Пользователь с Id {$id} не найден!");
         }
 

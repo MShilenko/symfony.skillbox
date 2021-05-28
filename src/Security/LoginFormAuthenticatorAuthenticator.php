@@ -76,7 +76,7 @@ class LoginFormAuthenticatorAuthenticator extends AbstractFormLoginAuthenticator
 
         $user = $this->userRepository->findOneBy(['email' => $credentials['email']]);
 
-        if (!$user->getIsActive()) {
+        if ($user && !$user->getIsActive()) {
             throw new CustomUserMessageAuthenticationException('Уходи бабайка!');
         }
 
