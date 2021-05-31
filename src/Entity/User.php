@@ -51,7 +51,7 @@ class User implements UserInterface
     private $isActive;
 
     /**
-     * @ORM\OneToMany(targetEntity=ApiToken::class, mappedBy="aUser", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ApiToken::class, mappedBy="user", orphanRemoval=true)
      */
     private $apiTokens;
 
