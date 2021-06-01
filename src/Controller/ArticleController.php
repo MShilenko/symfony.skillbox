@@ -2,21 +2,25 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Article;
-use App\Homework\ArticleContentProviderInterface;
+use Psr\Log\LoggerInterface;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Homework\ArticleContentProviderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 
 class ArticleController extends AbstractController
 {
     /**
      * @Route("/", name="app_homepage")
      */
-    public function index(ArticleRepository $articleRepository, CommentRepository $commentRepository) 
+    public function index(ArticleRepository $articleRepository, CommentRepository $commentRepository)
     {
         $articles = $articleRepository->findLatestPublished();
         $lastComments = $commentRepository->findLatestWithLimit(3);
@@ -44,7 +48,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/articles/{slug}", name="app_article_show")
      */
-    public function show(string $slug, ArticleRepository $articleRepository) 
+    public function show(string $slug, ArticleRepository $articleRepository)
     {
         $article = $articleRepository->getArticleWithComments($slug);
 
@@ -54,19 +58,31 @@ class ArticleController extends AbstractController
     /**
      * @Route("/api/v1/article_content/", methods={"GET"})
      */
-    public function apiShow(Request $request, ArticleContentProviderInterface $provider)
-    {   
+    public function apiShow(
+        Request $request,
+        ArticleContentProviderInterface $provider,
+        Security $security,
+        LoggerInterface $apiLogger
+    ) {
+        /** @var $user User */
+        $user = $security->getUser();
+
+        if (!$user || !$user->hasRole('ROLE_API')) {
+            $apiLogger->warning('Попытка входа в раздел API', ['User' => $user->getFirstName() ?? 'Аноним']);
+            throw new \Exception('Доступ запрещен!');
+        }
+
         $type = $request->headers->get('Accept');
         $response = new JsonResponse();
 
         if ($type !== 'application/json') {
-            return $response->setData(['error' => 'Передайте строку в формате json']); 
+            return $response->setData(['error' => 'Передайте строку в формате json']);
         }
 
         $requestData = json_decode($request->getContent());
 
         if (!isset($requestData->paragraphs)) {
-            return $response->setData(['error' => 'Укажите количество формируемых парагафов']); 
+            return $response->setData(['error' => 'Укажите количество формируемых парагафов']);
         }
 
         return $response->setData(['text' => $provider->get($requestData->paragraphs, $requestData->word ?? null, $requestData->wordCount ?? 0)]);
