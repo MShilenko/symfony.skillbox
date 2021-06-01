@@ -67,8 +67,8 @@ class ArticleController extends AbstractController
         /** @var $user User */
         $user = $security->getUser();
 
-        if (!$user || !$user->hasRole('ROLE_API')) {
-            $apiLogger->warning('Попытка входа в раздел API', ['User' => $user->getFirstName() ?? 'Аноним']);
+        if ($this->isGranted('ROLE_API')) {
+            $apiLogger->warning('Попытка входа в раздел API', ['User' => $user ? $user->getFirstName() : 'Аноним']);
             throw new \Exception('Доступ запрещен!');
         }
 

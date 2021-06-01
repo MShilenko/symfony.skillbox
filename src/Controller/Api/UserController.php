@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/api/user", name="api_user")
+     * @Route("/api/v1/user", name="api_user")
      */
     public function index(): Response
     {

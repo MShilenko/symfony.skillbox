@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Repository\UserRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -31,6 +32,9 @@ class LoginFormAuthenticatorAuthenticator extends AbstractFormLoginAuthenticator
     /** @var CsrfTokenManagerInterface $csrfTokenManager */
     private $csrfTokenManager;
 
+    /** @var LoggerInterface $apiLogger */
+    private $apiLogger;
+
     /** @var UserPasswordEncoderInterface $userPasswordEncoder */
     private $userPasswordEncoder;
 
@@ -38,12 +42,14 @@ class LoginFormAuthenticatorAuthenticator extends AbstractFormLoginAuthenticator
         UserRepository $userRepository,
         UrlGeneratorInterface $urlGenerator,
         CsrfTokenManagerInterface $csrfTokenManager,
-        UserPasswordEncoderInterface $userPasswordEncoder
+        UserPasswordEncoderInterface $userPasswordEncoder,
+        LoggerInterface $apiLogger
     ) {
         $this->userRepository = $userRepository;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->userPasswordEncoder = $userPasswordEncoder;
+        $this->apiLogger = $apiLogger;
     }
 
     protected function getLoginUrl()
@@ -93,8 +99,17 @@ class LoginFormAuthenticatorAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
-        $path = $this->getTargetPath($request->getSession(), $providerKey);
+        $path = $this->getTargetPath($request->getSession(), $providerKey) ?? $this->urlGenerator->generate('app_homepage');
 
-        return new RedirectResponse($path ?? $this->urlGenerator->generate('app_homepage'));
+        $this->apiLogger->info(
+            'User API',
+            [
+                'Name' => $token->getUsername(),
+                'Route' => $request->attributes->get('_route'),
+                'Url' => $path
+            ]
+        );
+
+        return new RedirectResponse($path);
     }
 }
