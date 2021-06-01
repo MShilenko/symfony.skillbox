@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ApiTokenRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ApiTokenRepository;
+use DateTime;
 
 /**
  * @ORM\Entity(repositoryClass=ApiTokenRepository::class)
@@ -20,7 +22,7 @@ class ApiToken
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Token;
+    private $token;
 
     /**
      * @ORM\Column(type="datetime")
@@ -33,6 +35,13 @@ class ApiToken
      */
     private $user;
 
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+        $this->token = sha1(uniqid('token'));
+        $this->expiresAt = new DateTime('+1 day');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -40,14 +49,7 @@ class ApiToken
 
     public function getToken(): ?string
     {
-        return $this->Token;
-    }
-
-    public function setToken(string $Token): self
-    {
-        $this->Token = $Token;
-
-        return $this;
+        return $this->token;
     }
 
     public function getExpiresAt(): ?\DateTimeInterface
@@ -55,22 +57,13 @@ class ApiToken
         return $this->expiresAt;
     }
 
-    public function setExpiresAt(\DateTimeInterface $expiresAt): self
-    {
-        $this->expiresAt = $expiresAt;
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function isExpired(): bool
     {
-        $this->user = $user;
-
-        return $this;
+        return $this->getExpiresAt() <= new \DateTime();
     }
 }
