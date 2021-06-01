@@ -61,13 +61,12 @@ class ArticleController extends AbstractController
     public function apiShow(
         Request $request,
         ArticleContentProviderInterface $provider,
-        Security $security,
         LoggerInterface $apiLogger
     ) {
         /** @var $user User */
-        $user = $security->getUser();
+        $user = $this->getUser();
 
-        if ($this->isGranted('ROLE_API')) {
+        if (!$this->isGranted('ROLE_API')) {
             $apiLogger->warning('Попытка входа в раздел API', ['User' => $user ? $user->getFirstName() : 'Аноним']);
             throw new \Exception('Доступ запрещен!');
         }
