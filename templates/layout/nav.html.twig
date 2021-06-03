@@ -20,9 +20,11 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/profile.html">Профиль</a>
-                            <a class="dropdown-item" href="/create.html">Создать статью</a>
+                            {% if is_granted('ROLE_ADMIN_ARTICLE') %}
+                                <a class="dropdown-item" href="{{ path('app_admin_articles_create') }}">Создать статью</a>
+                            {% endif %}                         
                             {% if is_granted('ROLE_ADMIN') %}
-                                <a class="dropdown-item" href="/admin.html">Админ</a>
+                                <a class="dropdown-item" href="{{ path('app_admin') }}">Админ</a>
                             {% endif %}                         
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ path('app_logout') }}">Выйти</a>
