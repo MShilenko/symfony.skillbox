@@ -42,11 +42,13 @@ class ArticleRepository extends ServiceEntityRepository
             ->innerJoin('article.author', 'author')
             ->addSelect('author')
             ->addSelect('tags')
+            ->innerJoin('article.author', 'author')
+            ->addSelect('author')
             ->getQuery()
             ->getResult();
     }
 
-    public function getArticleWithComments(string $slug = ''): ?Article
+    public function getArticleWithCommentsAndUser(string $slug = ''): ?Article
     {
         $qb = $this->createQueryBuilder('article');
 
@@ -59,6 +61,8 @@ class ArticleRepository extends ServiceEntityRepository
             ->innerJoin('article.author', 'author')
             ->addSelect('author')
             ->addSelect('tags')
+            ->innerJoin('article.author', 'author')
+            ->addSelect('author')
             ->getQuery()
             ->getOneOrNullResult();
     }
