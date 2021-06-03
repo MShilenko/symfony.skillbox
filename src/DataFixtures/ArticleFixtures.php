@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Entity\Article;
 use Doctrine\Persistence\ObjectManager;
 use App\Homework\ArticleContentProviderInterface;
@@ -24,7 +25,7 @@ class ArticleFixtures extends BaseFixtures implements DependentFixtureInterface
             $article
                 ->setTitle($this->faker->words(2, true))
                 ->setImage('article-' . $this->faker->numberBetween(1, 3) . '.jpg')
-                ->setAuthor($this->faker->firstName())
+                ->setAuthor($this->getRandomReference(User::class))
                 ->setVoteCount($this->faker->numberBetween(0, 10))
                 ->setDescription($this->faker->words($this->faker->numberBetween(3, 8), true));
 
@@ -43,7 +44,7 @@ class ArticleFixtures extends BaseFixtures implements DependentFixtureInterface
                 $article->setKeywords($this->faker->words($this->faker->numberBetween(2, 6), true));
             }
 
-            for ($i = 0; $i <= rand(0, 4); $i++) { 
+            for ($i = 0; $i <= rand(0, 4); $i++) {
                 $article->addTag($this->getRandomReference(Tag::class));
             }
         });
@@ -51,6 +52,9 @@ class ArticleFixtures extends BaseFixtures implements DependentFixtureInterface
 
     public function getDependencies()
     {
-        return [TagFixtures::class];
+        return [
+            TagFixtures::class,
+            UserFixtures::class
+        ];
     }
 }
