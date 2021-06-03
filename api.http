@@ -1,0 +1,7 @@
+@host = https://127.0.0.1:8000
+@auth_token = 815595152a0e2c6c84ca605c6648f41fee4caddc
+
+###
+GET {{host}}/api/user
+Accept: application/json
+Authorization: Bearer {{auth_token}}
