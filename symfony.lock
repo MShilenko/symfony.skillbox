@@ -201,6 +201,15 @@
     "php-http/stopwatch-plugin": {
         "version": "1.4.0"
     },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "5.2.2"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.4.0"
+    },
     "predis/predis": {
         "version": "v1.1.6"
     },
@@ -457,6 +466,12 @@
     "symfony/security-http": {
         "version": "v5.1.11"
     },
+    "symfony/serializer": {
+        "version": "v5.1.11"
+    },
+    "symfony/serializer-pack": {
+        "version": "v1.0.4"
+    },
     "symfony/service-contracts": {
         "version": "v2.2.0"
     },
@@ -555,5 +570,8 @@
     },
     "webimpress/safe-writer": {
         "version": "2.1.0"
+    },
+    "webmozart/assert": {
+        "version": "1.10.0"
     }
 }
