@@ -39,6 +39,8 @@ class ArticleRepository extends ServiceEntityRepository
             ->innerJoin('article.comments', 'comments')
             ->addSelect('comments')
             ->leftJoin('article.tags', 'tags')
+            ->innerJoin('article.author', 'author')
+            ->addSelect('author')
             ->addSelect('tags')
             ->getQuery()
             ->getResult();
@@ -54,6 +56,8 @@ class ArticleRepository extends ServiceEntityRepository
             ->innerJoin('article.comments', 'comments')
             ->addSelect('comments')
             ->leftJoin('article.tags', 'tags')
+            ->innerJoin('article.author', 'author')
+            ->addSelect('author')
             ->addSelect('tags')
             ->getQuery()
             ->getOneOrNullResult();

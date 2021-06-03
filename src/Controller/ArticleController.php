@@ -8,10 +8,11 @@ use Psr\Log\LoggerInterface;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Homework\ArticleContentProviderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 
@@ -85,5 +86,20 @@ class ArticleController extends AbstractController
         }
 
         return $response->setData(['text' => $provider->get($requestData->paragraphs, $requestData->word ?? null, $requestData->wordCount ?? 0)]);
+    }
+
+    /**
+     * @Route("/api/v1/articles/{id}", methods={"GET"})
+     * @IsGranted("API", subject="article")
+     */
+    public function apiGetArticle(Article $article)
+    {
+        return $this->json([
+            'id' => $article->getId(),
+            'title' => $article->getTitle(),
+            'slug' => $article->getSlug(),
+            'description' => $article->getDescription(),
+            'body' => $article->getBody(),
+        ]);
     }
 }

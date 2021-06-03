@@ -54,6 +54,7 @@ class SecurityController extends AbstractController
             $user
                 ->setEmail($request->request->get('email'))
                 ->setFirstName($request->request->get('firstName'))
+                ->setIsActive(true)
                 ->setPassword($userPasswordEncoder->encodePassword($user, $request->request->get('password')));
 
             $em = $this->getDoctrine()->getManager();
@@ -68,6 +69,11 @@ class SecurityController extends AbstractController
             );
         }
 
-        return $this->render('security/register.html.twig');
+        return $this->render(
+            'security/register.html.twig',
+            [
+                'error' => '',
+            ]
+        );
     }
 }

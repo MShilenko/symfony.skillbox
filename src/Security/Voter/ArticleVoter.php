@@ -14,14 +14,15 @@ class ArticleVoter extends Voter
     private $security;
 
 
-    public function __construct(Security $security) {
+    public function __construct(Security $security)
+    {
         $this->security = $security;
     }
 
 
     protected function supports(string $attribute, $subject): bool
     {
-        return in_array($attribute, ['MANAGE'])
+        return in_array($attribute, ['MANAGE', 'API'])
             && $subject instanceof Article;
     }
 
@@ -39,6 +40,12 @@ class ArticleVoter extends Voter
         switch ($attribute) {
             case 'MANAGE':
                 if ($subject->getAuthor() === $user || $this->security->isGranted('ROLE_ADMIN_ARTICLE')) {
+                    return true;
+                }
+
+                break;
+            case 'API':
+                if ($subject->getAuthor() === $user || $this->security->isGranted('ROLE_API')) {
                     return true;
                 }
 
