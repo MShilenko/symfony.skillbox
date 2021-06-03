@@ -55,9 +55,15 @@ class User implements UserInterface
      */
     private $apiTokens;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="author")
+     */
+    private $articles;
+
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,7 +112,8 @@ class User implements UserInterface
         return $this;
     }
 
-    public function hasRole(string $role): bool {
+    public function hasRole(string $role): bool
+    {
         return in_array($role, $this->getRoles());
     }
 
@@ -191,5 +198,35 @@ class User implements UserInterface
     public function getApiTokens(): Collection
     {
         return $this->apiTokens;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): self
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getAuthor() === $this) {
+                $article->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }
