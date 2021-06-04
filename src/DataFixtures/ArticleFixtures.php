@@ -21,7 +21,7 @@ class ArticleFixtures extends BaseFixtures implements DependentFixtureInterface
 
     public function loadData(ObjectManager $manager): void
     {
-        $this->createMany(Article::class, 20, function (Article $article) {
+        $this->createMany(Article::class, 25, function (Article $article) {
             $article
                 ->setTitle($this->faker->words(2, true))
                 ->setImage('article-' . $this->faker->numberBetween(1, 3) . '.jpg')

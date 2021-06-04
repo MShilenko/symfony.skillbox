@@ -51,7 +51,7 @@ class ArticleController extends AbstractController
      */
     public function show(string $slug, ArticleRepository $articleRepository)
     {
-        $article = $articleRepository->getArticleWithComments($slug);
+        $article = $articleRepository->getArticleWithCommentsAndUser($slug);
 
         return $this->render('articles/show.html.twig', compact('article'));
     }
