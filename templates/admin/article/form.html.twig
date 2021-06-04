@@ -1,0 +1,10 @@
+{{ form_start(articleForm) }}                    
+    {{ form_row(articleForm.title, { label: 'Название статьи' }) }}
+    {{ form_row(articleForm.description, { label: 'Описание статьи' }) }}
+    {{ form_row(articleForm.body, { label: 'Содержимое статьи' }) }}
+    {{ form_row(articleForm.publishedAt, { label: 'Дата публикации статьи' }) }}
+    {{ form_row(articleForm.keywords, { label: 'Ключевые слова статьи' }) }}
+    {{ form_row(articleForm.author, { label: 'Автор статьи', placeholder: 'Выберите автора статьи' }) }}
+    
+    <button type="submit" class="btn btn-primary">{{ button_text }}</button>
+{{ form_end(articleForm) }}

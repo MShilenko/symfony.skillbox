@@ -4,17 +4,25 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use App\Homework\RegistrationSpamFilter;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Homework\RegistrationSpamFilterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @UniqueEntity(fields="email", message="Вы уже зарегистрированы")
  */
 class User implements UserInterface
 {
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -25,6 +33,8 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups("main")
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
@@ -60,10 +70,14 @@ class User implements UserInterface
      */
     private $articles;
 
+    /** @var RegistrationSpamFilterInterface $registrationSpamFilter */
+    protected $registrationSpamFilter;
+
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->registrationSpamFilter = new RegistrationSpamFilter();
     }
 
     public function getId(): ?int
@@ -228,5 +242,17 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback()
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if ($this->registrationSpamFilter->filter($this->getEmail())) {
+            $context->buildViolation('Ботам здесь не место!')
+                ->atPath('email')
+                ->addViolation();
+        }
     }
 }

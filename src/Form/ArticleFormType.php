@@ -6,8 +6,8 @@ use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\Article;
 use App\Repository\UserRepository;
-use App\Homework\ArticleWordsFilter;
 use Symfony\Component\Form\AbstractType;
+use App\Homework\ArticleWordsFilterInterface;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -20,10 +20,10 @@ class ArticleFormType extends AbstractType
     /** @var UserRepository $userRepository */
     protected $userRepository;
 
-    /** @var ArticleWordsFilter $articleWordsFilter */
+    /** @var ArticleWordsFilterInterface $articleWordsFilter */
     protected $articleWordsFilter;
 
-    public function __construct(UserRepository $userRepository, ArticleWordsFilter $articleWordsFilter)
+    public function __construct(UserRepository $userRepository, ArticleWordsFilterInterface $articleWordsFilter)
     {
         $this->userRepository = $userRepository;
         $this->articleWordsFilter = $articleWordsFilter;
@@ -34,37 +34,28 @@ class ArticleFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, [
-                'label' => 'Название статьи',
-                'help' => 'Не используйте в названии слово "собака"',
-            ])
+            ->add('title')
             ->add('description', TextareaType::class, [
-                'label' => 'Описание статьи',
                 'attr' => [
                     'rows' => 3,
                 ]
             ])
             ->add('body', TextareaType::class, [
-                'label' => 'Содержимое статьи',
                 'attr' => [
                     'rows' => 10,
                 ]
             ])
             ->add('publishedAt', null, [
-                'label' => 'Дата публикации статьи',
                 'widget' => 'single_text',
             ])
-            ->add('keywords', TextType::class, [
-                'label' => 'Ключевые слова статьи',
-            ])
+            ->add('keywords')
             ->add('author', EntityType::class, [
                 'class' => User::class,
                 'choices' => $this->userRepository->findAllSortedByName(),
                 'choice_label' => function (User $user) {
                     return sprintf('%s (id: %d)', $user->getFirstName(), $user->getId());
                 },
-                'label' => 'Автор статьи',
-                'placeholder' => 'Выберите автора статьи',
+                'invalid_message' => 'Автор не найден!',
             ]);
 
         $builder->get('body')
