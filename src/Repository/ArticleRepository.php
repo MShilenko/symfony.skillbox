@@ -36,11 +36,9 @@ class ArticleRepository extends ServiceEntityRepository
     {
         return $this
             ->published($this->latest())
-            ->innerJoin('article.comments', 'comments')
+            ->leftJoin('article.comments', 'comments')
             ->addSelect('comments')
             ->leftJoin('article.tags', 'tags')
-            ->innerJoin('article.author', 'author')
-            ->addSelect('author')
             ->addSelect('tags')
             ->innerJoin('article.author', 'author')
             ->addSelect('author')
@@ -55,16 +53,26 @@ class ArticleRepository extends ServiceEntityRepository
         return $qb
             ->where('article.slug = :slug')
             ->setParameter('slug', $slug)
-            ->innerJoin('article.comments', 'comments')
+            ->leftJoin('article.comments', 'comments')
             ->addSelect('comments')
             ->leftJoin('article.tags', 'tags')
-            ->innerJoin('article.author', 'author')
-            ->addSelect('author')
             ->addSelect('tags')
             ->innerJoin('article.author', 'author')
             ->addSelect('author')
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findAllWithSearchQuery(?string $search): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('a');
+        $qFields = ["a.title", "a.body", "author.firstName"];
+        $this->withSearchQuery($qb, $qFields, $search);
+
+        return $qb
+            ->innerJoin('a.author', 'author')
+            ->addSelect('author')
+            ->orderBy('a.createdAt', 'DESC');
     }
 
     // Пример выборки с параметрами для связанной таблицы

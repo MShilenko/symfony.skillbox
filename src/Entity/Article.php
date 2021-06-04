@@ -277,4 +277,9 @@ class Article
 
         return $this;
     }
+
+    public function isPublished(): bool
+    {
+        return (bool) $this->publishedAt;
+    }
 }
