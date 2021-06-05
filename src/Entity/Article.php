@@ -58,6 +58,7 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Описание статьи не должно быть пустым!")
      * @Assert\Length(max="100")
      */
     private $description;
