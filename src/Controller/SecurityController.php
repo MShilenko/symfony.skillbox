@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserRegistrationFormType;
 use App\Security\LoginFormAuthenticator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,20 +46,26 @@ class SecurityController extends AbstractController
      */
     public function register(
         Request $request,
-        UserPasswordEncoderInterface $userPasswordEncoder,
+        UserPasswordEncoderInterface $passwordEncoder,
+        EntityManagerInterface $em,
         GuardAuthenticatorHandler $guard,
         LoginFormAuthenticator $authenticator
     ) {
-        if ($request->isMethod('POST')) {
-            $user = new User();
+        
+        $form = $this->createForm(UserRegistrationFormType::class);
+        
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var User $user */
+            $user = $form->getData();
 
-            $user
-                ->setEmail($request->request->get('email'))
-                ->setFirstName($request->request->get('firstName'))
-                ->setIsActive(true)
-                ->setPassword($userPasswordEncoder->encodePassword($user, $request->request->get('password')));
+            $user->setIsActive(true);
+            $user->setPassword($passwordEncoder->encodePassword(
+                $user,
+                $form['plainPassword']->getData()
+            ));
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
@@ -69,11 +77,9 @@ class SecurityController extends AbstractController
             );
         }
 
-        return $this->render(
-            'security/register.html.twig',
-            [
-                'error' => '',
-            ]
-        );
+        return $this->render('security/register.html.twig', [
+            'registrationForm' => $form->createView(), 
+        ]);
     }
+
 }

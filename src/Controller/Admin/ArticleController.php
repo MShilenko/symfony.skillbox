@@ -7,6 +7,7 @@ use App\Entity\Article;
 use App\Form\ArticleFormType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,37 +36,64 @@ class ArticleController extends AbstractController
     }
 
 
-    /**
-     * @Route("/admin/articles/create", name="app_admin_articles_create")
+   /**
      * @IsGranted("ROLE_ADMIN_ARTICLE")
+     * @Route("/admin/articles/create", name="app_admin_articles_create")
      */
-    public function create(Request $request, EntityManagerInterface $em)
+    public function create(EntityManagerInterface $em, Request $request)
     {
         $form = $this->createForm(ArticleFormType::class);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Article $article */
-            $article = $form->getData();
-            $article->setPublishedAt(new DateTime());
-
-            $em->persist($article);
-            $em->flush();
+        if ($this->handleFormRequest($form, $em, $request)) {
 
             $this->addFlash('flash_message', 'Статья успешно создана');
 
             return $this->redirectToRoute('app_admin_articles');
         }
-
-        return $this->render('admin/article/create.html.twig', ['articleForm' => $form->createView()]);
+        
+        return $this->render('admin/article/create.html.twig', [
+            'articleForm' => $form->createView(),
+            'showError' => $form->isSubmitted(),
+        ]);
     }
 
     /**
-     * @Route("/admin/articles/{id}/edit", name="app_admin_articles_edit")
+     * @Route("/admin/articles/{id}/edit", name="app_admin_article_edit")
      * @IsGranted("MANAGE", subject="article")
      */
-    public function edit(Article $article)
+    public function edit(Article $article, EntityManagerInterface $em, Request $request)
     {
-        return new Response("Страница редактирования статьи {$article->getTitle()}");
+        $form = $this->createForm(ArticleFormType::class, $article);
+
+        if ($article = $this->handleFormRequest($form, $em, $request)) {
+
+            $this->addFlash('flash_message', 'Статья успешно изменена');
+
+            return $this->redirectToRoute('app_admin_article_edit', [
+                'id' => $article->getId(),
+            ]);
+        }
+
+        return $this->render('admin/article/edit.html.twig', [
+            'articleForm' => $form->createView(),
+            'showError' => $form->isSubmitted(),
+        ]);
+    }
+    
+    private function handleFormRequest(FormInterface $form, EntityManagerInterface $em, Request $request)
+    {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Article $article */
+            $article = $form->getData();
+
+            $em->persist($article);
+            $em->flush();
+            
+            return $article;
+        }
+        
+        return null;
     }
 }
