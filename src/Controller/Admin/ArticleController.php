@@ -36,7 +36,7 @@ class ArticleController extends AbstractController
     }
 
 
-   /**
+    /**
      * @IsGranted("ROLE_ADMIN_ARTICLE")
      * @Route("/admin/articles/create", name="app_admin_articles_create")
      */
@@ -50,7 +50,7 @@ class ArticleController extends AbstractController
 
             return $this->redirectToRoute('app_admin_articles');
         }
-        
+
         return $this->render('admin/article/create.html.twig', [
             'articleForm' => $form->createView(),
             'showError' => $form->isSubmitted(),
@@ -63,7 +63,7 @@ class ArticleController extends AbstractController
      */
     public function edit(Article $article, EntityManagerInterface $em, Request $request)
     {
-        $form = $this->createForm(ArticleFormType::class, $article,['enable_published_at' => true]);
+        $form = $this->createForm(ArticleFormType::class, $article, ['enable_published_at' => true]);
 
         if ($article = $this->handleFormRequest($form, $em, $request)) {
 
@@ -79,7 +79,7 @@ class ArticleController extends AbstractController
             'showError' => $form->isSubmitted(),
         ]);
     }
-    
+
     private function handleFormRequest(FormInterface $form, EntityManagerInterface $em, Request $request)
     {
         $form->handleRequest($request);
@@ -90,10 +90,10 @@ class ArticleController extends AbstractController
 
             $em->persist($article);
             $em->flush();
-            
+
             return $article;
         }
-        
+
         return null;
     }
 }
