@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserRegistrationFormType;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Form\Model\UserRegistrationFormModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,14 +58,19 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var User $user */
-            $user = $form->getData();
+            /** @var UserRegistrationFormModel $userModel */
+            $userModel = $form->getData();
 
-            $user->setIsActive(true);
-            $user->setPassword($passwordEncoder->encodePassword(
-                $user,
-                $form['plainPassword']->getData()
-            ));
+            $user = new User();
+
+            $user
+                ->setEmail($userModel->email)
+                ->setFirstName($userModel->firstName)
+                ->setIsActive(true)
+                ->setPassword($passwordEncoder->encodePassword(
+                    $user,
+                    $userModel->plainPassword
+                ));
 
             $em->persist($user);
             $em->flush();

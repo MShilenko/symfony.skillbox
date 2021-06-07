@@ -8,20 +8,21 @@
 
             <div class="col-sm-12">
 
+                    {% form_theme registrationForm 'security/partial/custom_email_row.html.twig' %}
                     {{ form_start(registrationForm, { attr: {class: 'form-signin'} }) }}
                         <h1 class="h3 mb-3 font-weight-normal">Регистрация</h1>
                     
                         {{ form_row(registrationForm.email, {
                             attr: {placeholder: 'Ваш Email...'},
-                            label_attr: {class: 'sr-only'}
+                            label_attr: {class: 'mb-2'}
                         }) }}
                         {{ form_row(registrationForm.firstName, {
                             attr: {placeholder: 'Ваше Имя...'},
-                            label_attr: {class: 'sr-only'}
+                            label_attr: {class: ''}
                         }) }}
                         {{ form_row(registrationForm.plainPassword, {
                             attr: {placeholder: 'Ваш Пароль...'},
-                            label_attr: {class: 'sr-only'}
+                            label_attr: {class: ''}
                         }) }}
 
                         {{ form_row(registrationForm.agreeTerms, {
