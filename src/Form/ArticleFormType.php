@@ -28,27 +28,22 @@ class ArticleFormType extends AbstractType
         $this->articleWordsFilter = $articleWordsFilter;
     }
 
-
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Article|null $article */
+        $article = $options['data'] ?? null;
+
+        $cannotEditAuthor = $article && $article->getId() && $article->isPublished();
+
         $builder
             ->add('title')
             ->add('description', TextareaType::class, [
-                'attr' => [
-                    'rows' => 3,
-                ]
+                'rows' => 3,
             ])
-            ->add('body', TextareaType::class, [
-                'attr' => [
-                    'rows' => 10,
-                ]
-            ])
-            ->add('publishedAt', null, [
-                'widget' => 'single_text',
-            ])
+            ->add('body')
             ->add('keywords')
             ->add('author', EntityType::class, [
+                'disabled' => $cannotEditAuthor,
                 'class' => User::class,
                 'choices' => $this->userRepository->findAllSortedByName(),
                 'choice_label' => function (User $user) {
@@ -76,12 +71,19 @@ class ArticleFormType extends AbstractType
                     return $this->articleWordsFilter->filter($bodyFromInput, ['стакан', 'чел']);
                 }
             ));
+
+        if ($options['enable_published_at']) {
+            $builder->add('publishedAt', null, [
+                'widget' => 'single_text',
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Article::class,
+            'enable_published_at' => false,
         ]);
     }
 }
