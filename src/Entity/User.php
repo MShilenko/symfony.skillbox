@@ -244,15 +244,16 @@ class User implements UserInterface
         return $this;
     }
 
+    // Пример валидации, обязательно срабатывающей на каждом хите
     /**
      * @Assert\Callback()
      */
-    public function validate(ExecutionContextInterface $context, $payload)
-    {
-        if ($this->registrationSpamFilter->filter($this->getEmail())) {
-            $context->buildViolation('Ботам здесь не место!')
-                ->atPath('email')
-                ->addViolation();
-        }
-    }
+    // public function validate(ExecutionContextInterface $context, $payload)
+    // {
+    //     if ($this->registrationSpamFilter->filter($this->getEmail())) {
+    //         $context->buildViolation('Ботам здесь не место!')
+    //             ->atPath('email')
+    //             ->addViolation();
+    //     }
+    // }
 }
