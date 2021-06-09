@@ -14,3 +14,4 @@ import './styles/app.css';
 require('bootstrap');
 
 import './vote'
+import './bootstrap_file_field'

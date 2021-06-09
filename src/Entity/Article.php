@@ -214,11 +214,6 @@ class Article
         return $this;
     }
 
-    public function getImagePath(): string
-    {
-        return "images/{$this->getImage()}";
-    }
-
     public function getAuthorAvatarPath(): string
     {
         return "https://robohash.org/{$this->getAuthor()->getFirstName()}.png?set=set3";

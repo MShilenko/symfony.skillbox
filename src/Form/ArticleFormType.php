@@ -11,7 +11,10 @@ use App\Homework\ArticleWordsFilterInterface;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ArticleFormType extends AbstractType
@@ -35,6 +38,21 @@ class ArticleFormType extends AbstractType
 
         $cannotEditAuthor = $article && $article->getId() && $article->isPublished();
 
+        $imageConstrains = [
+            new Image([
+                'maxSize' => '2M',
+                'minHeight' => '300',
+                'minWidth' => '480',
+                'allowPortrait' => false,
+            ]),
+        ];
+
+        if (!$article || !$article->getImage()) {
+            $imageConstrains[] = new NotNull([
+                'message' => 'Не выбрано изображение статьи',
+            ]);
+        }
+
         $builder
             ->add('title')
             ->add('description', TextareaType::class, [
@@ -50,6 +68,11 @@ class ArticleFormType extends AbstractType
                     return sprintf('%s (id: %d)', $user->getFirstName(), $user->getId());
                 },
                 'invalid_message' => 'Автор не найден!',
+            ])
+            ->add('image', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'constraints' => $imageConstrains
             ]);
 
         $builder->get('body')
