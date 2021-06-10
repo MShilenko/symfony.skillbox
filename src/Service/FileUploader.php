@@ -2,11 +2,11 @@
 
 namespace App\Service;
 
-
+use Exception;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
@@ -14,6 +14,7 @@ class FileUploader
      * @var SluggerInterface
      */
     private $slugger;
+    
     /**
      * @var FilesystemOperator
      */
@@ -41,14 +42,14 @@ class FileUploader
         }
 
         if (! $this->filesystem->fileExists($fileName)) {
-            throw new \Exception("Не удалось записать файл: $fileName");
+            throw new Exception(sprintf('Не удалось записать файл: %s', $fileName));
         }
         
         if ($oldFileName && $this->filesystem->fileExists($oldFileName)) {
             $this->filesystem->delete($oldFileName);
 
             if ($this->filesystem->fileExists($oldFileName)) {
-                throw new \Exception("Ошибка удаления файла: $oldFileName");
+                throw new Exception(sprintf('Ошибка удаления файла: %s', $oldFileName));
             }
         }
 

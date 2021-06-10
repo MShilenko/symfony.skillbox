@@ -9,6 +9,14 @@ parameters:
     article_uploads: 'uploads/articles'
     article_uploads_url: '%env(SITE_URL)%/%article_uploads%'
 
+    # Article Image
+    app.article_image:
+        min_width: '%env(int:ARTICLE_IMAGE_MIN_WIDTH)%'
+        min_height: '%env(int:ARTICLE_IMAGE_MIN_HEIGHT)%'
+        max_size: '%env(string:ARTICLE_IMAGE_MAX_SIZE)%'
+        allow_portrait: '%env(bool:ARTICLE_IMAGE_ALLOW_PORTRAIT)%'
+    # /Article Image
+
 services:
     # default configuration for services in *this* file
     _defaults:

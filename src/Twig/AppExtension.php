@@ -9,7 +9,7 @@ use Twig\Extension\AbstractExtension;
 
 class AppExtension extends AbstractExtension
 {
-    public function getFunctions(): array 
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('uploaded_asset', [AppUploadedAsset::class, 'asset'])
@@ -25,4 +25,3 @@ class AppExtension extends AbstractExtension
         ];
     }
 }
-

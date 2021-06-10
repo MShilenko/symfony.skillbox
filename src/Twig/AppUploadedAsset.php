@@ -2,7 +2,6 @@
 
 namespace App\Twig;
 
-
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Extension\RuntimeExtensionInterface;
@@ -13,6 +12,7 @@ class AppUploadedAsset implements RuntimeExtensionInterface
      * @var ParameterBagInterface
      */
     private $parameterBag;
+
     /**
      * @var Packages
      */
