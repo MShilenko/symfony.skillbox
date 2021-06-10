@@ -6,6 +6,16 @@
 parameters:
     app.cache_time: '%env(int:CACHE_TIME)%' # env - взять переменную окружения(файл .env и т.п.), int: - синтаксис объявления типа переменной.
     cache_adapter: cache.adapter.redis
+    article_uploads: 'uploads/articles'
+    article_uploads_url: '%env(SITE_URL)%/%article_uploads%'
+
+    # Article Image
+    app.article_image:
+        min_width: '%env(int:ARTICLE_IMAGE_MIN_WIDTH)%'
+        min_height: '%env(int:ARTICLE_IMAGE_MIN_HEIGHT)%'
+        max_size: '%env(string:ARTICLE_IMAGE_MAX_SIZE)%'
+        allow_portrait: '%env(bool:ARTICLE_IMAGE_ALLOW_PORTRAIT)%'
+    # /Article Image
 
 services:
     # default configuration for services in *this* file
@@ -16,6 +26,10 @@ services:
         bind:
             $debug: '%kernel.debug%'
             $markArticle: '%env(string:MARK_ARTICLE_WORDS_WITH_BOLD)%'
+
+            League\Flysystem\FilesystemOperator $articlesFilesystem: '@oneup_flysystem.uploads_articles_filesystem'
+            # App\Service\FileUploader $articleFileUploader: '@file_uploader.article'
+            # App\Service\FileUploader $avatarFileUploader: '@file_uploader.avatar'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -39,3 +53,12 @@ services:
     # App\Service\MarkdownParser:
     #     arguments: 
     #         $logger: '@monolog.logger.markdown'
+
+    # file_uploader.article: 
+    #     class: App\Service\FileUploader
+    #     arguments: 
+    #         $uploadsPath: '%article_uploads_dir%'
+    # file_uploader.avatar:
+    #     class: App\Service\FileUploader
+    #     arguments: 
+    #         $uploadsPath: '/path/to/avatar'

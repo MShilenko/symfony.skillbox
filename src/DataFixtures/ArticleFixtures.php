@@ -5,7 +5,9 @@ namespace App\DataFixtures;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Entity\Article;
+use App\Service\FileUploader;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\File\File;
 use App\Homework\ArticleContentProviderInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
@@ -14,17 +16,30 @@ class ArticleFixtures extends BaseFixtures implements DependentFixtureInterface
     /** @var ArticleContentProviderInterface $articleContentProvider */
     private $articleContentProvider;
 
-    public function __construct(ArticleContentProviderInterface $articleContentProviderInterface)
+    /** @var FileUploader $articleFileUploader */
+    private $articleFileUploader;
+
+    private static $articleImages = [
+        'article-1.jpg',
+        'article-2.jpg',
+        'article-3.jpg',
+    ];
+
+
+    public function __construct(ArticleContentProviderInterface $articleContentProviderInterface, FileUploader $articleFileUploader)
     {
         $this->articleContentProvider = $articleContentProviderInterface;
+        $this->articleFileUploader = $articleFileUploader;
     }
 
     public function loadData(ObjectManager $manager): void
     {
         $this->createMany(Article::class, 25, function (Article $article) {
+            $fileName = $this->faker->randomElement(self::$articleImages);
+
             $article
                 ->setTitle($this->faker->words(2, true))
-                ->setImage('article-' . $this->faker->numberBetween(1, 3) . '.jpg')
+                ->setImage($this->articleFileUploader->uploadFile(new File(dirname(dirname(__DIR__)) . '/public/images/' . $fileName)))
                 ->setAuthor($this->getRandomReference(User::class))
                 ->setVoteCount($this->faker->numberBetween(0, 10))
                 ->setDescription($this->faker->words($this->faker->numberBetween(3, 8), true));

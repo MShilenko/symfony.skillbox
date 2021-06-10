@@ -129,6 +129,9 @@
     "http-interop/http-factory-guzzle": {
         "version": "1.0.0"
     },
+    "imagine/imagine": {
+        "version": "1.2.4"
+    },
     "knplabs/knp-components": {
         "version": "v3.0.2"
     },
@@ -143,6 +146,25 @@
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
+    },
+    "league/flysystem": {
+        "version": "2.1.0"
+    },
+    "league/mime-type-detection": {
+        "version": "1.7.0"
+    },
+    "liip/imagine-bundle": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.8",
+            "ref": "5a5bdc2d0e2533ed6935d5ae562f2b318a8fc1ee"
+        },
+        "files": [
+            "config/packages/liip_imagine.yaml",
+            "config/routes/liip_imagine.yaml"
+        ]
     },
     "monolog/monolog": {
         "version": "2.1.1"
@@ -161,6 +183,18 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.10.0"
+    },
+    "oneup/flysystem-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "3ae1b83985e89138f5443bbc2d9b8c074b497d49"
+        },
+        "files": [
+            "config/packages/oneup_flysystem.yaml"
+        ]
     },
     "php-http/client-common": {
         "version": "2.3.0"
@@ -383,6 +417,9 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/mime": {
+        "version": "v5.1.11"
+    },
     "symfony/monolog-bridge": {
         "version": "v5.1.9"
     },
@@ -427,6 +464,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.20.0"
+    },
+    "symfony/process": {
+        "version": "v5.1.11"
     },
     "symfony/profiler-pack": {
         "version": "v1.0.5"

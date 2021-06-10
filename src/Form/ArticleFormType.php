@@ -11,8 +11,12 @@ use App\Homework\ArticleWordsFilterInterface;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class ArticleFormType extends AbstractType
 {
@@ -22,10 +26,14 @@ class ArticleFormType extends AbstractType
     /** @var ArticleWordsFilterInterface $articleWordsFilter */
     protected $articleWordsFilter;
 
-    public function __construct(UserRepository $userRepository, ArticleWordsFilterInterface $articleWordsFilter)
+    /** @var ContainerBagInterface $params */
+    protected $params;
+
+    public function __construct(UserRepository $userRepository, ArticleWordsFilterInterface $articleWordsFilter, ContainerBagInterface $params)
     {
         $this->userRepository = $userRepository;
         $this->articleWordsFilter = $articleWordsFilter;
+        $this->params = $params;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -34,6 +42,22 @@ class ArticleFormType extends AbstractType
         $article = $options['data'] ?? null;
 
         $cannotEditAuthor = $article && $article->getId() && $article->isPublished();
+
+        $imgParams = $this->params->get('app.article_image');
+        $imageConstrains = [
+            new Image([
+                'maxSize' => $imgParams['max_size'],
+                'minHeight' => $imgParams['min_height'],
+                'minWidth' => $imgParams['min_width'],
+                'allowPortrait' => $imgParams['allow_portrait'],
+            ]),
+        ];
+
+        if (!$article || !$article->getImage()) {
+            $imageConstrains[] = new NotNull([
+                'message' => 'Не выбрано изображение статьи',
+            ]);
+        }
 
         $builder
             ->add('title')
@@ -50,6 +74,11 @@ class ArticleFormType extends AbstractType
                     return sprintf('%s (id: %d)', $user->getFirstName(), $user->getId());
                 },
                 'invalid_message' => 'Автор не найден!',
+            ])
+            ->add('image', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'constraints' => $imageConstrains
             ]);
 
         $builder->get('body')
