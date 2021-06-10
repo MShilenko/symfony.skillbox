@@ -48,15 +48,15 @@ class Mailer
         );
     }
 
-    public function sendStatisticReport(User $user)
+    public function sendStatisticReport(User $user, string $statistic)
     {
         $this->send(
             'email/statistic.html.twig',
             'Отчет администратору',
             $user,
-            function (TemplatedEmail $email) {
+            function (TemplatedEmail $email) use ($statistic) {
                 $email
-                    ->attachFromPath($this->params->get('reports_url') . '/statistic.csv');
+                    ->attach($statistic, 'statistic.csv', 'text/csv');
             }
         );
     }

@@ -78,18 +78,16 @@ class AdminStatisticReportCommand extends Command
             'Статей опубликовано за период' => $this->articleRepository->findPublishedCountForThePeriod($dateFrom, $dateTo),
         ];
 
-        $this->saveToCsvFile($statistic);
-
-        $this->mailer->sendStatisticReport($user);
+        $this->mailer->sendStatisticReport($user, $this->prepareCsvString($statistic));
 
         return Command::SUCCESS;
     }
 
-    private function saveToCsvFile(array $data): void
+    private function prepareCsvString(array $statistic): string
     {
-        $fp = fopen($this->params->get('reports_url') . '/statistic.csv', 'w');
-        fputcsv($fp, array_keys($data));
-        fputcsv($fp, array_values($data));
-        fclose($fp);
+        $headers = implode(';', array_keys($statistic)); 
+        $data = implode(';', array_values($statistic));
+
+        return sprintf("%s\n%s", $headers, $data);
     }
 }

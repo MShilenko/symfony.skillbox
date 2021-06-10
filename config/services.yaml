@@ -8,7 +8,6 @@ parameters:
     cache_adapter: cache.adapter.redis
     article_uploads: 'uploads/articles'
     article_uploads_url: '%env(SITE_URL)%/%article_uploads%'
-    reports_url: '%kernel.project_dir%/public/reports'
     router.request_context.scheme: '%env(SITE_BASE_SCHEME)%'
     router.request_context.host: '%env(SITE_BASE_HOST)%'
 
