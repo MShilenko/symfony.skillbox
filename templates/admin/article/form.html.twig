@@ -1,4 +1,15 @@
-{{ form_start(articleForm) }}                    
+{{ form_start(articleForm) }}
+    {% if articleForm.vars.data.image %}
+        <a href="{{ uploaded_asset('article_uploads_url', articleForm.vars.data.image)}}" target="_blank">
+            <img src="{{ articleForm.vars.data.image | imagine_filter('articles_preview') }}" height="100">
+        </a>
+    {% endif %}                    
+    {{ form_row(articleForm.image, {
+        label: 'Изображение',
+        attr: {
+            placeholder: 'Выберите изображение'
+        }
+    }) }}
     {{ form_row(articleForm.title, { label: 'Название статьи' }) }}
     {{ form_row(articleForm.description, { label: 'Описание статьи' }) }}
     {{ form_row(articleForm.body, { label: 'Содержимое статьи' }) }}

@@ -6,7 +6,9 @@
 {% block content %}
 
 <div class="media d-flex align-content-center">
-    <img class="article-detail-image align-self-start mr-3 rounded" src="{{ asset(article.imagePath) }}">
+    <a href="{{ uploaded_asset('article_uploads', article.image) }}">
+        <img class="article-detail-image align-self-start mr-3 rounded" src="{{ article.image | imagine_filter('articles_detail') }}">
+    </a>
     <div class="media-body d-inline-block align-self-center">
         <h1 class="mb-2">{{ article.title }}</h1>
         <div class="d-flex mb-2">

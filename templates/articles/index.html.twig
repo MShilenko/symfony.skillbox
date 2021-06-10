@@ -8,7 +8,7 @@
                 <div class="article-container mb-2">
                     <div class="row no-gutters border flex-md-row p-3 mb-4 shadow-sm">
                         <div class="col-auto d-block">
-                            <img class="article-img" src="{{ asset(article.imagePath) }}">
+                            <img class="article-img" src="{{ article.image | imagine_filter('articles_preview') }}">
                         </div>
                         <div class="col px-4 d-flex flex-column article-item" >
                             <a href="{{ path('app_article_show', { slug: article.slug }) }}">
