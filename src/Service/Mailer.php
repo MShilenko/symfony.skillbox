@@ -63,8 +63,9 @@ class Mailer
 
     private function send(string $template, string $subject, User $user, Closure $callback = null)
     {
+        $sendParams = $this->params->get('app.mailer');
         $email = (new TemplatedEmail())
-            ->from(new Address('noreply@symfony.skillbox', 'Spill-Coffee-On-The-Keyboard'))
+            ->from(new Address($sendParams['from_email'], $sendParams['title']))
             ->to(new Address($user->getEmail(), $user->getFirstName()))
             ->htmlTemplate($template)
             ->subject($subject);

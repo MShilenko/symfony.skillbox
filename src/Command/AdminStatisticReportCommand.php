@@ -85,7 +85,7 @@ class AdminStatisticReportCommand extends Command
         return Command::SUCCESS;
     }
 
-    public function saveToCsvFile(array $data): void
+    private function saveToCsvFile(array $data): void
     {
         $fp = fopen($this->params->get('reports_url') . '/statistic.csv', 'w');
         fputcsv($fp, array_keys($data));
