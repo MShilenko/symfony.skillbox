@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\Article;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -45,6 +46,40 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllPublishedLastWeek()
+    {
+        return $this->published($this->latest())
+            ->andWhere('article.publishedAt >= :week_ago')
+            ->setParameter('week_ago', new DateTime('-1 week'))
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findCreatedCountForThePeriod(DateTime $from, DateTime $to)
+    {
+        return $this->createQueryBuilder('article')
+            ->select('count(article.id)')
+            ->andWhere('article.createdAt >= :from')
+            ->setParameter('from', $from)
+            ->andWhere('article.createdAt <= :to')
+            ->setParameter('to', $to)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findPublishedCountForThePeriod(DateTime $from, DateTime $to)
+    {
+        return $this->createQueryBuilder('article')
+            ->select('count(article.id)')
+            ->andWhere('article.publishedAt >= :from')
+            ->setParameter('from', $from)
+            ->andWhere('article.publishedAt <= :to')
+            ->setParameter('to', $to)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 
     public function getArticleWithCommentsAndUser(string $slug = ''): ?Article
     {
