@@ -8,6 +8,8 @@ parameters:
     cache_adapter: cache.adapter.redis
     article_uploads: 'uploads/articles'
     article_uploads_url: '%env(SITE_URL)%/%article_uploads%'
+    router.request_context.scheme: '%env(SITE_BASE_SCHEME)%'
+    router.request_context.host: '%env(SITE_BASE_HOST)%'
 
     # Article Image
     app.article_image:
@@ -16,6 +18,12 @@ parameters:
         max_size: '%env(string:ARTICLE_IMAGE_MAX_SIZE)%'
         allow_portrait: '%env(bool:ARTICLE_IMAGE_ALLOW_PORTRAIT)%'
     # /Article Image
+
+    # Mailer
+    app.mailer:
+        from_email: '%env(string:MAILER_FROM_EMAIL)%'
+        title: '%env(string:MAILER_TITLE)%'
+    # /Mailer
 
 services:
     # default configuration for services in *this* file

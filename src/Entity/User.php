@@ -73,6 +73,11 @@ class User implements UserInterface
     /** @var RegistrationSpamFilterInterface $registrationSpamFilter */
     protected $registrationSpamFilter;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $subscribeToNewsletter;
+
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
@@ -256,4 +261,16 @@ class User implements UserInterface
     //             ->addViolation();
     //     }
     // }
+
+    public function getSubscribeToNewsletter(): ?bool
+    {
+        return $this->subscribeToNewsletter;
+    }
+
+    public function setSubscribeToNewsletter(?bool $subscribeToNewsletter): self
+    {
+        $this->subscribeToNewsletter = $subscribeToNewsletter;
+
+        return $this;
+    }
 }

@@ -27,13 +27,14 @@ class UserFixtures extends BaseFixtures
                 ->setFirstName('admin')
                 ->setIsActive(true)
                 ->setPassword($this->userPasswordEncoder->encodePassword($user, '123456'))
-                ->setRoles(['ROLE_ADMIN']);
+                ->setRoles(['ROLE_ADMIN'])
+                ->setSubscribeToNewsletter(true);
 
             $manager->persist(new ApiToken($user));
         });
 
-         // API
-         $this->create(User::class, function (User $user) use ($manager) {
+        // API
+        $this->create(User::class, function (User $user) use ($manager) {
             $user
                 ->setEmail('api@symfony.skillbox')
                 ->setFirstName('api')
@@ -41,7 +42,7 @@ class UserFixtures extends BaseFixtures
                 ->setPassword($this->userPasswordEncoder->encodePassword($user, '123456'))
                 ->setRoles(['ROLE_API']);
 
-            for ($i = 0; $i < 3; $i++) { 
+            for ($i = 0; $i < 3; $i++) {
                 $manager->persist(new ApiToken($user));
             }
         });
@@ -51,7 +52,8 @@ class UserFixtures extends BaseFixtures
                 ->setEmail($this->faker->email())
                 ->setFirstName($this->faker->firstName())
                 ->setIsActive(true)
-                ->setPassword($this->userPasswordEncoder->encodePassword($user, '123456'));
+                ->setPassword($this->userPasswordEncoder->encodePassword($user, '123456'))
+                ->setSubscribeToNewsletter($this->faker->boolean);
 
             if ($this->faker->boolean(30)) {
                 $user->setIsActive(false);
