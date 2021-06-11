@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use DateTime;
 use App\Entity\Article;
+use App\Events\ArticleCreatedEvent;
 use App\Form\ArticleFormType;
 use App\Service\FileUploader;
 use App\Repository\ArticleRepository;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ArticleController extends AbstractController
@@ -42,13 +44,15 @@ class ArticleController extends AbstractController
      * @IsGranted("ROLE_ADMIN_ARTICLE")
      * @Route("/admin/articles/create", name="app_admin_articles_create")
      */
-    public function create(EntityManagerInterface $em, Request $request, FileUploader $articleFileUploader)
+    public function create(EntityManagerInterface $em, Request $request, FileUploader $articleFileUploader, EventDispatcherInterface $eventDispatcher)
     {
         $form = $this->createForm(ArticleFormType::class, new Article());
 
-        if ($this->handleFormRequest($form, $em, $request, $articleFileUploader)) {
+        if ($article = $this->handleFormRequest($form, $em, $request, $articleFileUploader)) {
 
             $this->addFlash('flash_message', 'Статья успешно создана');
+
+            $eventDispatcher->dispatch(new ArticleCreatedEvent($article));
 
             return $this->redirectToRoute('app_admin_articles');
         }
@@ -94,7 +98,7 @@ class ArticleController extends AbstractController
             $image = $form->get('image')->getData();
     
             if ($image) {
-                $article->setImageFilename($articleFileUploader->uploadFile($image, $article->getImageFilename()));
+                $article->setImage($articleFileUploader->uploadFile($image, $article->getImage()));
             }
 
             $em->persist($article);

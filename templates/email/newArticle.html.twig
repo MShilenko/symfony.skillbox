@@ -1,0 +1,16 @@
+{% extends 'email/emailBase.html.twig' %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>#</th>
+        <th>Название</th>
+        <th>Посмотреть</th>
+    </tr>
+    <tr>
+        <td>{{ article.id }}</td>
+        <td>{{ article.title }}</td>
+        <td><a href="{{ url('app_article_show', { slug: article.slug }) }}">Перейти</a></td>
+    </tr>
+</table>
+{% endblock %}

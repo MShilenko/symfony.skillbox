@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Closure;
 use App\Entity\User;
+use App\Entity\Article;
 use Symfony\Component\Mime\Address;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -30,6 +31,22 @@ class Mailer
     public function sendWelcomeMail(User $user)
     {
         $this->send('email/welcome.html.twig', 'Добро пожаловать', $user);
+    }
+
+    public function sendArticleCreated(Article $article)
+    {
+        $author = $article->getAuthor();
+        $sendParams = $this->params->get('app.mailer');
+        $email = (new TemplatedEmail())
+            ->from(new Address($sendParams['from_email'], $sendParams['title']))
+            ->to(new Address($author->getEmail(), $author->getFirstName()))
+            ->htmlTemplate('email/newArticle.html.twig')
+            ->subject('Создана новая статья')
+            ->context([
+                'article' => $article,
+            ]);
+
+        $this->mailer->send($email);
     }
 
     public function sendWeeklyNewsletter(User $user, array $articles)
